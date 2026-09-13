@@ -1,0 +1,273 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.header {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.subtitle {
+  color: var(--text-secondary);
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  gap: var(--spacing-md);
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.iconSuccess {
+  color: var(--green);
+}
+
+/* Causal Chain Typography & Layout */
+.chainContainer {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto;
+  padding-left: var(--spacing-xl);
+}
+
+.chainLine {
+  position: absolute;
+  top: 10px;
+  bottom: 40px;
+  left: 10px;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--surface-border), var(--violet-transparent));
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.chainStep {
+  position: relative;
+  padding-bottom: var(--spacing-2xl);
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.chainStep:nth-child(2) { animation-delay: 0.1s; }
+.chainStep:nth-child(3) { animation-delay: 0.2s; }
+.chainStep:nth-child(4) { animation-delay: 0.3s; }
+.chainStep:nth-child(5) { animation-delay: 0.4s; }
+.chainStep:nth-child(6) { animation-delay: 0.5s; }
+.chainStep:nth-child(7) { animation-delay: 0.6s; }
+
+.stepNode {
+  position: absolute;
+  left: calc(var(--spacing-xl) * -1 + 4px);
+  top: 6px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--surface-secondary);
+  border: 2px solid var(--text-muted);
+  z-index: 2;
+  transition: all var(--transition-normal);
+}
+
+.stepNodeAi {
+  position: absolute;
+  left: calc(var(--spacing-xl) * -1 + 4px);
+  top: 6px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--violet);
+  box-shadow: 0 0 12px rgba(124, 58, 237, 0.6);
+  z-index: 2;
+}
+
+.stepContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.stepLabel {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+.stepLabelAi {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--violet-bright);
+}
+
+/* Incident Detection */
+.incidentHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+}
+
+.iconBlue { color: var(--blue); }
+.iconAmber { color: var(--amber); }
+.iconGreen { color: var(--green); }
+
+.incidentTitleBlock h3 {
+  font-size: 1.5rem;
+  margin: 0;
+  color: var(--text);
+}
+
+.machineRef {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.evidenceList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-sm);
+}
+
+.evidenceItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  background: var(--background);
+  border: 1px solid var(--surface-border);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-sm);
+}
+
+.evMetric {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.evChange {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.textRed { color: var(--red); }
+.textAmber { color: var(--amber); }
+
+/* Root Cause */
+.causeBlock {
+  background: var(--violet-transparent);
+  border-left: 4px solid var(--violet-bright);
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  box-shadow: inset 0 0 20px rgba(124, 58, 237, 0.05);
+}
+
+.causeHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--violet-bright);
+}
+
+.causeHeader h3 {
+  font-size: 1.25rem;
+  margin: 0;
+  color: var(--violet-bright);
+}
+
+.causeDesc {
+  color: var(--text);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.confidenceBadge {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.confidenceBadge strong {
+  font-size: 1.5rem;
+  color: var(--violet-bright);
+}
+
+/* Impact */
+.impactGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-md);
+  background: var(--background);
+  border: 1px solid var(--surface-border);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-sm);
+}
+
+.impactItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.impactLabel {
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.impactValue {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.impactValueBad {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--red);
+}
+
+/* Recommendation */
+.recommendationBlock {
+  background: var(--violet-transparent);
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: var(--glow-primary);
+}
+
+.recHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.recHeader h3 {
+  font-size: 1.5rem;
+  margin: 0;
+  color: var(--text);
+}
+
+.recFooter {
+  display: flex;
+}

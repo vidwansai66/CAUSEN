@@ -1,0 +1,1945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAUSEN AI — Industrial Anomaly Detection, Root Cause & Recovery Decision System</title>
+    <style>
+        :root {
+            --bg-base: #0a0e17;
+            --bg-surface: #111827;
+            --bg-card: #182234;
+            --bg-input: #0e1524;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-highlight: rgba(59, 130, 246, 0.3);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-blue: #3b82f6;
+            --accent-cyan: #06b6d4;
+            --accent-emerald: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-rose: #ef4444;
+            --accent-purple: #8b5cf6;
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 14px;
+            --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+            --font-main: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            line-height: 1.5;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        /* Header Banner */
+        .app-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(17, 24, 39, 0.9) 100%);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .brand-section {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-logo {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+        }
+
+        .brand-title h1 {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(90deg, #ffffff, #93c5fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-title p {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: var(--radius-md);
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6);
+        }
+
+        .btn-demo {
+            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+            color: #ffffff;
+            box-shadow: 0 4px 14px rgba(124, 58, 237, 0.4);
+        }
+
+        .btn-demo:hover {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            border-color: var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: #1f2d42;
+            color: var(--text-primary);
+        }
+
+        /* Decision Flow Stepper */
+        .decision-flow-bar {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            overflow-x: auto;
+        }
+
+        .flow-step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: all 0.3s ease;
+        }
+
+        .flow-step.active {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+        }
+
+        .flow-step.active .step-dot {
+            background: var(--accent-cyan);
+            box-shadow: 0 0 10px var(--accent-cyan);
+        }
+
+        .flow-step.completed {
+            color: var(--accent-emerald);
+        }
+
+        .flow-step.completed .step-dot {
+            background: var(--accent-emerald);
+        }
+
+        .step-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            transition: all 0.3s ease;
+        }
+
+        .flow-arrow {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* Main Layout Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+        /* Left Side: Input Panel */
+        .panel-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-card);
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .panel-title {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Scenario Quick Selectors */
+        .scenarios-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .scenario-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 10px 12px;
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            transition: all 0.2s ease;
+        }
+
+        .scenario-btn:hover {
+            background: #202d44;
+            border-color: var(--accent-blue);
+            color: var(--text-primary);
+        }
+
+        .scenario-btn.active {
+            border-color: var(--accent-cyan);
+            background: rgba(6, 182, 212, 0.1);
+            color: var(--text-primary);
+        }
+
+        .scenario-badge {
+            font-size: 10px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        /* Form Inputs */
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .range-hint {
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 400;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .input-control {
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-family: var(--font-mono);
+            font-size: 13px;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+
+        .input-control:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        .slider-control {
+            flex-grow: 1;
+            accent-color: var(--accent-cyan);
+            cursor: pointer;
+        }
+
+        .select-control {
+            background: var(--bg-input);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-size: 13px;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            width: 100%;
+            cursor: pointer;
+        }
+
+        /* Right Content Area */
+        .results-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Top Row Cards: Anomaly Score & Root Cause */
+        .overview-cards-row {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 20px;
+        }
+
+        /* Anomaly Gauge Card */
+        .gauge-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .gauge-svg {
+            width: 220px;
+            height: 120px;
+        }
+
+        .gauge-score-value {
+            font-size: 38px;
+            font-weight: 800;
+            font-family: var(--font-mono);
+            line-height: 1;
+            margin-top: -30px;
+            margin-bottom: 4px;
+        }
+
+        .gauge-status-badge {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+        }
+
+        /* Root Cause Card */
+        .rca-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .cause-title-box {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .cause-primary {
+            font-size: 20px;
+            font-weight: 800;
+            color: #ffffff;
+        }
+
+        .confidence-pill {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-emerald);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            font-family: var(--font-mono);
+        }
+
+        .explanation-text {
+            background: var(--bg-card);
+            border-left: 3px solid var(--accent-blue);
+            padding: 12px 16px;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            font-size: 13px;
+            color: #cbd5e1;
+            line-height: 1.6;
+            margin-bottom: 14px;
+        }
+
+        .evidence-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .evidence-chip {
+            background: #1e293b;
+            border: 1px solid var(--border-color);
+            font-size: 11px;
+            color: var(--text-secondary);
+            padding: 4px 10px;
+            border-radius: var(--radius-sm);
+        }
+
+        /* Operational Impact Metrics Row */
+        .impact-metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+
+        .impact-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .impact-card-title {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .impact-card-value {
+            font-size: 24px;
+            font-weight: 800;
+            font-family: var(--font-mono);
+            color: var(--text-primary);
+        }
+
+        .impact-card-desc {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        /* Best Decision Recommendation Banner */
+        .recommendation-banner {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            border-radius: var(--radius-lg);
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.15);
+        }
+
+        .rec-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .rec-icon {
+            font-size: 34px;
+            background: var(--bg-surface);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            width: 58px;
+            height: 58px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .rec-text h3 {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: var(--accent-cyan);
+            letter-spacing: 0.8px;
+            margin-bottom: 2px;
+        }
+
+        .rec-action-name {
+            font-size: 20px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .rec-justification {
+            font-size: 13px;
+            color: #cbd5e1;
+            max-width: 650px;
+        }
+
+        .rec-right {
+            text-align: right;
+            border-left: 1px solid var(--border-color);
+            padding-left: 24px;
+        }
+
+        .rec-score-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .rec-score-num {
+            font-size: 32px;
+            font-weight: 900;
+            font-family: var(--font-mono);
+            color: var(--accent-emerald);
+        }
+
+        /* Recovery Strategies 4-Option Grid */
+        .strategies-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+
+        .strategy-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .strategy-card.recommended {
+            border-color: var(--accent-emerald);
+            background: linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, var(--bg-surface) 100%);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+        }
+
+        .strat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .strat-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .strat-tag {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 12px;
+            background: var(--bg-card);
+            color: var(--text-secondary);
+        }
+
+        .strat-tag.rec {
+            background: var(--accent-emerald);
+            color: #ffffff;
+        }
+
+        .strat-metric-list {
+            list-style: none;
+            margin-bottom: 12px;
+        }
+
+        .strat-metric-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            padding: 4px 0;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.05);
+        }
+
+        .strat-metric-item span:first-child {
+            color: var(--text-muted);
+        }
+
+        .strat-metric-item span:last-child {
+            font-family: var(--font-mono);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .strat-score-row {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        /* Automated Recovery Workflow Stepper */
+        .automation-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+        }
+
+        .workflow-steps-list {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-top: 14px;
+        }
+
+        .workflow-step-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .step-num {
+            font-size: 11px;
+            font-family: var(--font-mono);
+            color: var(--text-muted);
+        }
+
+        .step-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .step-status {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--accent-emerald);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Charts 2x3 Grid */
+        .charts-section-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .chart-box {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chart-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .chart-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .chart-canvas {
+            width: 100%;
+            height: 180px;
+        }
+
+        /* Simulation History Table */
+        .history-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            margin-top: 12px;
+        }
+
+        .history-table th {
+            text-align: left;
+            padding: 10px 14px;
+            background: var(--bg-card);
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 11px;
+        }
+
+        .history-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        .history-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--text-primary);
+        }
+
+        .history-action-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--accent-cyan);
+            padding: 4px 10px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .history-action-btn:hover {
+            background: var(--accent-cyan);
+            color: #000;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            .charts-section-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .strategies-grid, .workflow-steps-list, .impact-metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Banner -->
+    <header class="app-header">
+        <div class="brand-section">
+            <div class="brand-logo">⚙️</div>
+            <div class="brand-title">
+                <h1>CAUSEN AI</h1>
+                <p>Industrial Anomaly Detection, Root Cause Analysis & Recovery Decision System</p>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button class="btn btn-demo" id="btnRunDemo" onclick="runDemoMode()">
+                <span>🎬</span> RUN FULL DEMO
+            </button>
+            <button class="btn btn-secondary" onclick="resetSimulation()">
+                <span>🔄</span> RESET
+            </button>
+            <button class="btn btn-primary" id="btnRunSim" onclick="executeSimulation()">
+                <span>🚀</span> RUN CAUSEN AI SIMULATION
+            </button>
+        </div>
+    </header>
+
+    <!-- AI Decision Flow Pipeline -->
+    <section class="decision-flow-bar">
+        <div class="flow-step" id="flow-input"><div class="step-dot"></div> SENSOR INPUT</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" id="flow-anomaly"><div class="step-dot"></div> ANOMALY DETECTION</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" id="flow-rca"><div class="step-dot"></div> ROOT CAUSE ANALYSIS</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" id="flow-impact"><div class="step-dot"></div> IMPACT PREDICTION</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" id="flow-whatif"><div class="step-dot"></div> WHAT-IF SIMULATION</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" id="flow-decision"><div class="step-dot"></div> DECISION ENGINE</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step" id="flow-recovery"><div class="step-dot"></div> RECOVERY PLAN</div>
+    </section>
+
+    <!-- Main Workspace Grid -->
+    <main class="dashboard-grid">
+
+        <!-- Left Sidebar: Controls & Scenarios -->
+        <aside>
+            <!-- Quick Test Scenarios -->
+            <div class="panel-card">
+                <div class="panel-header">
+                    <div class="panel-title">⚡ Quick Test Scenarios</div>
+                </div>
+                <div class="scenarios-grid">
+                    <button class="scenario-btn active" onclick="loadScenario('normal', this)">
+                        <span>🟢 Normal Operation</span>
+                        <span class="scenario-badge" style="color: var(--accent-emerald);">Baseline</span>
+                    </button>
+                    <button class="scenario-btn" onclick="loadScenario('bearing', this)">
+                        <span>🟠 Bearing Wear</span>
+                        <span class="scenario-badge" style="color: var(--accent-amber);">Vib 5.8 mm/s</span>
+                    </button>
+                    <button class="scenario-btn" onclick="loadScenario('motor', this)">
+                        <span>🔴 Motor Overheating</span>
+                        <span class="scenario-badge" style="color: var(--accent-rose);">Temp 92°C</span>
+                    </button>
+                    <button class="scenario-btn" onclick="loadScenario('misalignment', this)">
+                        <span>🟠 Misalignment</span>
+                        <span class="scenario-badge" style="color: var(--accent-amber);">Vib 6.5 mm/s</span>
+                    </button>
+                    <button class="scenario-btn" onclick="loadScenario('material', this)">
+                        <span>🔴 Material Quality</span>
+                        <span class="scenario-badge" style="color: var(--accent-rose);">Defect 12%</span>
+                    </button>
+                    <button class="scenario-btn" onclick="loadScenario('critical', this)">
+                        <span>🚨 Critical Failure</span>
+                        <span class="scenario-badge" style="color: var(--accent-rose);">Breakdown</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Manual Input Panel -->
+            <div class="panel-card">
+                <div class="panel-header">
+                    <div class="panel-title">🛠️ Industrial Machine Simulation</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <span>Machine Identity</span>
+                        <span class="range-hint">Production Line</span>
+                    </label>
+                    <select class="select-control" id="inp_machine" onchange="markCustomScenario()">
+                        <option value="M01">M01 – Cutting Machine (Line 1)</option>
+                        <option value="M02">M02 – Assembly Machine 1 (Line 1)</option>
+                        <option value="M03" selected>M03 – Processing Machine (Line 2)</option>
+                        <option value="M04">M04 – Packaging Machine (Line 2)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <span>Temperature (°C)</span>
+                        <span class="range-hint">Normal: 30–65 °C</span>
+                    </label>
+                    <div class="input-row">
+                        <input type="range" class="slider-control" id="slider_temp" min="20" max="110" step="0.5" value="48" oninput="syncInputs('temp', this.value)">
+                        <input type="number" class="input-control" id="inp_temp" min="20" max="110" step="0.5" value="48" style="width: 80px;" oninput="syncInputs('temp', this.value)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <span>Vibration (mm/s)</span>
+                        <span class="range-hint">Normal: 0.5–3.0 mm/s</span>
+                    </label>
+                    <div class="input-row">
+                        <input type="range" class="slider-control" id="slider_vib" min="0.2" max="10" step="0.1" value="1.4" oninput="syncInputs('vib', this.value)">
+                        <input type="number" class="input-control" id="inp_vib" min="0.2" max="10" step="0.1" value="1.4" style="width: 80px;" oninput="syncInputs('vib', this.value)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <span>Pressure (kPa)</span>
+                        <span class="range-hint">Normal: 95–105 kPa</span>
+                    </label>
+                    <div class="input-row">
+                        <input type="range" class="slider-control" id="slider_pres" min="70" max="130" step="0.5" value="101.3" oninput="syncInputs('pres', this.value)">
+                        <input type="number" class="input-control" id="inp_pres" min="70" max="130" step="0.5" value="101.3" style="width: 80px;" oninput="syncInputs('pres', this.value)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <span>Power Consumption (kW)</span>
+                        <span class="range-hint">Normal: 15–25 kW</span>
+                    </label>
+                    <div class="input-row">
+                        <input type="range" class="slider-control" id="slider_pwr" min="10" max="45" step="0.5" value="19.5" oninput="syncInputs('pwr', this.value)">
+                        <input type="number" class="input-control" id="inp_pwr" min="10" max="45" step="0.5" value="19.5" style="width: 80px;" oninput="syncInputs('pwr', this.value)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <span>Production Throughput</span>
+                        <span class="range-hint">Nominal: 1400 u/h</span>
+                    </label>
+                    <div class="input-row">
+                        <input type="range" class="slider-control" id="slider_prod" min="0" max="1600" step="10" value="1400" oninput="syncInputs('prod', this.value)">
+                        <input type="number" class="input-control" id="inp_prod" min="0" max="1600" step="10" value="1400" style="width: 80px;" oninput="syncInputs('prod', this.value)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <span>Defect Rate (%)</span>
+                        <span class="range-hint">Normal: &lt; 1.0%</span>
+                    </label>
+                    <div class="input-row">
+                        <input type="range" class="slider-control" id="slider_defect" min="0.1" max="20" step="0.1" value="0.8" oninput="syncInputs('defect', this.value)">
+                        <input type="number" class="input-control" id="inp_defect" min="0.1" max="20" step="0.1" value="0.8" style="width: 80px;" oninput="syncInputs('defect', this.value)">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label"><span>Machine Status</span></label>
+                    <select class="select-control" id="inp_status" onchange="markCustomScenario()">
+                        <option value="Normal">Normal</option>
+                        <option value="Warning">Warning</option>
+                        <option value="Critical">Critical</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label"><span>Maintenance Status</span></label>
+                    <select class="select-control" id="inp_maint" onchange="markCustomScenario()">
+                        <option value="Recently Maintained">Recently Maintained</option>
+                        <option value="Maintenance Due">Maintenance Due</option>
+                        <option value="Unknown">Unknown</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 10px;" onclick="executeSimulation()">
+                    <span>🚀</span> RUN CAUSEN AI SIMULATION
+                </button>
+            </div>
+        </aside>
+
+        <!-- Right Side: Dynamic AI Output & Visualizations -->
+        <div class="results-container">
+
+            <!-- Row 1: Anomaly Gauge & Root Cause Analysis -->
+            <div class="overview-cards-row">
+                <!-- Anomaly Gauge -->
+                <div class="gauge-card">
+                    <div class="panel-title" style="margin-bottom: 8px;">ANOMALY ANALYSIS</div>
+                    <svg class="gauge-svg" viewBox="0 0 200 110">
+                        <!-- Background Arc -->
+                        <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#1f293d" stroke-width="18" stroke-linecap="round" />
+                        <!-- Value Arc -->
+                        <path id="gauge_arc" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#10b981" stroke-width="18" stroke-linecap="round" stroke-dasharray="251.2" stroke-dashoffset="251.2" style="transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);" />
+                    </svg>
+                    <div class="gauge-score-value" id="disp_score_num">12</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">COMPOSITE ANOMALY SCORE (0-100)</div>
+                    <span class="gauge-status-badge" id="disp_status_badge" style="background: rgba(16,185,129,0.15); color: #10b981;">NORMAL</span>
+                    
+                    <div style="margin-top: 12px; font-size: 11px; color: var(--text-secondary); text-align: left; width: 100%;">
+                        <div style="font-weight: 700; margin-bottom: 4px; color: #cbd5e1;">Detected Issues:</div>
+                        <div id="disp_detected_issues">✓ All primary sensor channels operating within nominal tolerances</div>
+                    </div>
+                </div>
+
+                <!-- Root Cause Analysis -->
+                <div class="rca-card">
+                    <div>
+                        <div class="panel-title" style="margin-bottom: 12px;">🔍 Explainable Root Cause Analysis</div>
+                        <div class="cause-title-box">
+                            <div>
+                                <span style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Primary Probable Cause</span>
+                                <div class="cause-primary" id="disp_primary_cause">Normal Operation (Healthy Baseline)</div>
+                            </div>
+                            <span class="confidence-pill" id="disp_confidence">98% CONFIDENCE</span>
+                        </div>
+
+                        <div class="explanation-text" id="disp_ai_explanation">
+                            "Machine telemetry is operating at peak physical health. Temperatures and vibrations remain well within baseline tolerances with minimal scrap loss."
+                        </div>
+                    </div>
+
+                    <div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                            <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Secondary Possibility:</span>
+                            <span style="font-size: 11px; color: var(--text-secondary); font-family: var(--font-mono);" id="disp_secondary_cause">Minor Ambient Thermal Drift (15%)</span>
+                        </div>
+                        <div class="evidence-chips" id="disp_evidence_chips">
+                            <div class="evidence-chip">Temp: 48°C (Normal)</div>
+                            <div class="evidence-chip">Vib: 1.4 mm/s (Normal)</div>
+                            <div class="evidence-chip">Throughput: 1400 u/h</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 2: Operational Impact Metrics -->
+            <div class="impact-metrics-grid">
+                <div class="impact-card">
+                    <span class="impact-card-title">Estimated Downtime</span>
+                    <span class="impact-card-value" id="disp_downtime">0 min</span>
+                    <span class="impact-card-desc" id="disp_downtime_desc">Line operating normally</span>
+                </div>
+                <div class="impact-card">
+                    <span class="impact-card-title">Estimated Production Loss</span>
+                    <span class="impact-card-value" id="disp_prod_loss">0 units</span>
+                    <span class="impact-card-desc">No shortfall against target</span>
+                </div>
+                <div class="impact-card">
+                    <span class="impact-card-title">Defect Surge Risk</span>
+                    <span class="impact-card-value" id="disp_defect_risk" style="color: var(--accent-emerald);">Low</span>
+                    <span class="impact-card-desc" id="disp_scrap_units">~7 scrap units / batch</span>
+                </div>
+                <div class="impact-card">
+                    <span class="impact-card-title">Downstream Delay</span>
+                    <span class="impact-card-value" id="disp_downstream_delay">0 min</span>
+                    <span class="impact-card-desc">Buffer absorbs variation</span>
+                </div>
+            </div>
+
+            <!-- Row 3: Best Decision Recommendation Banner -->
+            <div class="recommendation-banner" id="disp_rec_banner">
+                <div class="rec-left">
+                    <div class="rec-icon" id="disp_rec_icon">🔄</div>
+                    <div class="rec-text">
+                        <h3>🤖 CAUSEN AI Recommended Strategy</h3>
+                        <div class="rec-action-name" id="disp_rec_name">Workload Redistribution</div>
+                        <div class="rec-justification" id="disp_rec_why">
+                            "Workload redistribution minimizes production loss and downstream disruption while allowing maintenance to be performed safely."
+                        </div>
+                    </div>
+                </div>
+                <div class="rec-right">
+                    <div class="rec-score-label">Expected Loss Score</div>
+                    <div class="rec-score-num" id="disp_rec_loss">14.4</div>
+                    <div style="font-size: 11px; color: var(--accent-emerald); font-weight: 700;">LOWEST OPERATIONAL LOSS</div>
+                </div>
+            </div>
+
+            <!-- Row 4: What-If Recovery Strategy Comparison (4 Options) -->
+            <div>
+                <div class="panel-title" style="margin-bottom: 12px;">⚖️ What-If Recovery Simulation (4 Industrial Options)</div>
+                <div class="strategies-grid" id="strategies_container">
+                    <!-- Dynamic Option Cards Rendered via JS -->
+                </div>
+            </div>
+
+            <!-- Row 5: Automated Recovery Workflow -->
+            <div class="automation-card">
+                <div class="panel-title">⚡ Automated Recovery Workflow Simulation</div>
+                <div class="workflow-steps-list">
+                    <div class="workflow-step-box">
+                        <span class="step-num">[1/5] Machine Telemetry</span>
+                        <span class="step-label">Anomaly Detected</span>
+                        <span class="step-status" id="wf_step_1">✓ Completed</span>
+                    </div>
+                    <div class="workflow-step-box">
+                        <span class="step-num">[2/5] Diagnostic AI</span>
+                        <span class="step-label">Root Cause Identified</span>
+                        <span class="step-status" id="wf_step_2">✓ Completed</span>
+                    </div>
+                    <div class="workflow-step-box">
+                        <span class="step-num">[3/5] Maintenance Ticket</span>
+                        <span class="step-label">Ticket #INC-2049</span>
+                        <span class="step-status" id="wf_step_3">✓ Dispatched</span>
+                    </div>
+                    <div class="workflow-step-box">
+                        <span class="step-num">[4/5] Shop Floor Alert</span>
+                        <span class="step-label">Supervisor Notified</span>
+                        <span class="step-status" id="wf_step_4">✓ Delivered</span>
+                    </div>
+                    <div class="workflow-step-box">
+                        <span class="step-num">[5/5] SCADA Command</span>
+                        <span class="step-label">Recovery Activated</span>
+                        <span class="step-status" id="wf_step_5">✓ In Execution</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 6: Dynamic Visualizations (6 Charts) -->
+            <div>
+                <div class="panel-title" style="margin-bottom: 12px;">📊 Real-Time Dynamic Engineering Visualizations</div>
+                <div class="charts-section-grid">
+                    <!-- Chart 1: Temperature -->
+                    <div class="chart-box">
+                        <div class="chart-header">
+                            <span class="chart-title">Temperature Trend & Limits</span>
+                            <span style="font-size: 11px; color: var(--accent-cyan);" id="chart_temp_val">48.0 °C</span>
+                        </div>
+                        <canvas id="canvas_temp" class="chart-canvas"></canvas>
+                    </div>
+
+                    <!-- Chart 2: Vibration -->
+                    <div class="chart-box">
+                        <div class="chart-header">
+                            <span class="chart-title">Vibration vs ISO 10816</span>
+                            <span style="font-size: 11px; color: var(--accent-purple);" id="chart_vib_val">1.40 mm/s</span>
+                        </div>
+                        <canvas id="canvas_vib" class="chart-canvas"></canvas>
+                    </div>
+
+                    <!-- Chart 3: Production Throughput -->
+                    <div class="chart-box">
+                        <div class="chart-header">
+                            <span class="chart-title">Throughput Capacity vs Actual</span>
+                            <span style="font-size: 11px; color: var(--accent-blue);" id="chart_prod_val">1400 u/h</span>
+                        </div>
+                        <canvas id="canvas_prod" class="chart-canvas"></canvas>
+                    </div>
+
+                    <!-- Chart 4: Anomaly Risk Breakdown -->
+                    <div class="chart-box">
+                        <div class="chart-header">
+                            <span class="chart-title">Multi-Channel Risk Contribution</span>
+                        </div>
+                        <canvas id="canvas_radar" class="chart-canvas"></canvas>
+                    </div>
+
+                    <!-- Chart 5: Recovery Strategies Comparison -->
+                    <div class="chart-box" style="grid-column: span 2;">
+                        <div class="chart-header">
+                            <span class="chart-title">Strategy Operational Loss Score Comparison (Lower is Better)</span>
+                        </div>
+                        <canvas id="canvas_strategies" class="chart-canvas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 7: Simulation Run History -->
+            <div class="history-card">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="panel-title">📜 Local Simulation Run History</div>
+                    <button class="btn btn-secondary" style="padding: 4px 12px; font-size: 11px;" onclick="clearHistory()">Clear History</button>
+                </div>
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Machine</th>
+                            <th>Anomaly Score</th>
+                            <th>Root Cause Diagnosis</th>
+                            <th>Recommended Recovery</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history_tbody">
+                        <!-- History rows appended via JS -->
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Interactive Simulation Logic Script -->
+    <script>
+        // Preset Scenarios
+        const SCENARIOS = {
+            normal: {
+                name: "Normal Operation",
+                machine: "M03",
+                temp: 48.0,
+                vib: 1.4,
+                pres: 101.3,
+                pwr: 19.5,
+                prod: 1400,
+                defect: 0.8,
+                status: "Normal",
+                maint: "Recently Maintained"
+            },
+            bearing: {
+                name: "Bearing Wear",
+                machine: "M03",
+                temp: 78.0,
+                vib: 5.8,
+                pres: 101.0,
+                pwr: 24.0,
+                prod: 1100,
+                defect: 3.0,
+                status: "Warning",
+                maint: "Maintenance Due"
+            },
+            motor: {
+                name: "Motor Overheating",
+                machine: "M02",
+                temp: 92.0,
+                vib: 3.2,
+                pres: 101.5,
+                pwr: 34.0,
+                prod: 950,
+                defect: 5.0,
+                status: "Critical",
+                maint: "Maintenance Due"
+            },
+            misalignment: {
+                name: "Mechanical Misalignment",
+                machine: "M01",
+                temp: 65.0,
+                vib: 6.5,
+                pres: 98.0,
+                pwr: 21.0,
+                prod: 900,
+                defect: 4.0,
+                status: "Warning",
+                maint: "Unknown"
+            },
+            material: {
+                name: "Material Quality Issue",
+                machine: "M04",
+                temp: 52.0,
+                vib: 1.8,
+                pres: 100.0,
+                pwr: 19.0,
+                prod: 1350,
+                defect: 12.0,
+                status: "Warning",
+                maint: "Recently Maintained"
+            },
+            critical: {
+                name: "Critical Machine Failure",
+                machine: "M03",
+                temp: 98.0,
+                vib: 8.5,
+                pres: 82.0,
+                pwr: 38.0,
+                prod: 300,
+                defect: 15.0,
+                status: "Critical",
+                maint: "Maintenance Due"
+            }
+        };
+
+        // Sync Slider & Number Inputs
+        function syncInputs(id, val) {
+            document.getElementById('slider_' + id).value = val;
+            document.getElementById('inp_' + id).value = val;
+            markCustomScenario();
+        }
+
+        function markCustomScenario() {
+            document.querySelectorAll('.scenario-btn').forEach(btn => btn.classList.remove('active'));
+        }
+
+        // Load Preset Scenario
+        function loadScenario(key, btnElem) {
+            const sc = SCENARIOS[key];
+            if (!sc) return;
+
+            document.getElementById('inp_machine').value = sc.machine;
+            syncInputs('temp', sc.temp);
+            syncInputs('vib', sc.vib);
+            syncInputs('pres', sc.pres);
+            syncInputs('pwr', sc.pwr);
+            syncInputs('prod', sc.prod);
+            syncInputs('defect', sc.defect);
+            document.getElementById('inp_status').value = sc.status;
+            document.getElementById('inp_maint').value = sc.maint;
+
+            document.querySelectorAll('.scenario-btn').forEach(b => b.classList.remove('active'));
+            if (btnElem) btnElem.classList.add('active');
+
+            executeSimulation();
+        }
+
+        function resetSimulation() {
+            loadScenario('normal', document.querySelector('.scenario-btn'));
+        }
+
+        // Core Dynamic Calculation Engine
+        function calculateSimulation(inputs) {
+            const temp = inputs.temp;
+            const vib = inputs.vib;
+            const pres = inputs.pres;
+            const pwr = inputs.pwr;
+            const prod = inputs.prod;
+            const defect = inputs.defect;
+
+            // 1. Dynamic Anomaly Scoring (0-100)
+            const detectedIssues = [];
+            let tempRisk = 0;
+            if (temp <= 60) tempRisk = Math.max(0, (temp - 42) * 0.3);
+            else if (temp <= 75) { tempRisk = 8 + (temp - 60) * 0.8; detectedIssues.push(`Elevated Temperature (${temp}°C > 60°C)`); }
+            else { tempRisk = Math.min(25, 20 + (temp - 75) * 0.25); detectedIssues.push(`Critical Thermal Overheating (${temp}°C > 75°C)`); }
+
+            let vibRisk = 0;
+            if (vib <= 2.5) vibRisk = Math.max(0, (vib - 1.2) * 2.0);
+            else if (vib <= 4.5) { vibRisk = 8 + (vib - 2.5) * 4.5; detectedIssues.push(`Abnormal Vibration (${vib} mm/s)`); }
+            else { vibRisk = Math.min(25, 17 + (vib - 4.5) * 2.0); detectedIssues.push(`Severe Mechanical Vibration (${vib} mm/s > 4.5 mm/s)`); }
+
+            const prodDeficit = Math.max(0, 1400 - prod);
+            let prodRisk = 0;
+            if (prodDeficit < 100) prodRisk = (prodDeficit / 100) * 2;
+            else if (prodDeficit < 500) { prodRisk = 4 + ((prodDeficit - 100) / 400) * 8; detectedIssues.push(`Reduced Production Throughput (${Math.round(prod)} u/h)`); }
+            else { prodRisk = Math.min(20, 12 + ((prodDeficit - 500) / 700) * 8); detectedIssues.push(`Acute Production Collapse (${Math.round(prod)} u/h)`); }
+
+            let defectRisk = 0;
+            if (defect <= 1.0) defectRisk = defect * 2.0;
+            else if (defect <= 5.0) { defectRisk = 5 + (defect - 1.0) * 3.5; detectedIssues.push(`High Scrap Defect Rate (${defect}%)`); }
+            else { defectRisk = Math.min(35, 19 + (defect - 5.0) * 1.6); detectedIssues.push(`Critical Quality Failure Spike (${defect}%)`); }
+
+            let pwrRisk = 0;
+            if (pwr <= 24) pwrRisk = Math.max(0, (pwr - 19.5) * 0.4);
+            else if (pwr <= 30) { pwrRisk = 3 + (pwr - 24) * 0.7; detectedIssues.push(`High Electrical Load (${pwr} kW)`); }
+            else { pwrRisk = Math.min(10, 7.2 + (pwr - 30) * 0.35); detectedIssues.push(`Abnormal Motor Electrical Draw (${pwr} kW)`); }
+
+            const presDelta = Math.abs(pres - 101.3);
+            let presRisk = presDelta <= 5 ? (presDelta / 5) * 1 : Math.min(5, 1 + (presDelta - 5) * 0.4);
+            if (presDelta > 6) detectedIssues.push(`Pressure Deviation (${pres} kPa)`);
+
+            const totalScore = Math.min(100, Math.max(0, Math.round((tempRisk + vibRisk + prodRisk + defectRisk + pwrRisk + presRisk) * 10) / 10));
+
+            let statusCategory = "NORMAL";
+            let badgeColor = "#10b981";
+            if (totalScore > 75) { statusCategory = "CRITICAL"; badgeColor = "#ef4444"; }
+            else if (totalScore > 50) { statusCategory = "HIGH RISK"; badgeColor = "#f97316"; }
+            else if (totalScore > 25) { statusCategory = "WARNING"; badgeColor = "#f59e0b"; }
+
+            if (detectedIssues.length === 0) detectedIssues.push("✓ All primary sensor channels operating within nominal tolerances");
+
+            // 2. Dynamic Root Cause Analysis
+            let primaryCause = "Normal Operation (Healthy Baseline)";
+            let primaryConf = 98;
+            let secondaryCause = "Minor Ambient Thermal Drift (15%)";
+            let aiExplanation = `Machine telemetry is operating at peak physical health. Temperatures and vibrations remain well within baseline tolerances with minimal scrap loss.`;
+
+            if (totalScore <= 25 && defect < 3.0) {
+                primaryCause = "Normal Operation (Healthy Baseline)";
+                primaryConf = 98;
+                secondaryCause = "Minor Ambient Thermal Drift (15%)";
+                aiExplanation = `Machine telemetry is operating at peak physical health. Temperatures and vibrations remain well within baseline tolerances with minimal scrap loss.`;
+            } else {
+                const hypotheses = [];
+
+                // Rule 5: Critical Machine Failure (Temp > 85 & Vib > 6.5 & Throughput <= 600)
+                if (temp >= 85 && vib >= 6.5 && prod <= 600) {
+                    const conf = Math.min(98, Math.round(84 + (temp - 85) * 0.8 + (vib - 6.5) * 2));
+                    hypotheses.push({
+                        cause: "Critical Machine Failure & Spindle Seizure",
+                        conf: conf,
+                        reason: `Extreme operating temperature (${temp}°C) coupled with critical vibration (${vib} mm/s) and collapsed throughput (${Math.round(prod)} u/h) points directly to catastrophic mechanical seizure.`
+                    });
+                }
+
+                // Rule 1: Bearing Wear (Vib >= 3.8 & (Temp >= 70 or Prod > 1000))
+                if (vib >= 3.8 && (temp >= 70 || prod > 1000)) {
+                    let conf = Math.round(72 + (vib - 3.8) * 4.5 + Math.max(0, (temp - 60) * 0.4));
+                    if (temp >= 70) conf += 8;
+                    conf = Math.min(96, conf);
+                    hypotheses.push({
+                        cause: "Bearing Wear & Friction Breakdown",
+                        conf: conf,
+                        reason: `High vibration (${vib} mm/s) combined with frictional heat rise (${temp}°C) matches the classic failure signature of bearing raceway spalling and lubricant breakdown.`
+                    });
+                }
+
+                // Rule 2: Motor Overheating (Temp >= 75 & (Power >= 25 or Temp >= 85))
+                if (temp >= 75 && (pwr >= 25 || temp >= 85)) {
+                    const baseM = pwr >= 28 ? 84 : 74;
+                    const conf = Math.min(97, Math.round(baseM + (temp - 75) * 0.6 + Math.max(0, (pwr - 24) * 0.8)));
+                    hypotheses.push({
+                        cause: "Motor Overheating & Stator Thermal Overload",
+                        conf: conf,
+                        reason: `Elevated stator temperature (${temp}°C) with excessive power consumption (${pwr} kW) indicates electrical drive winding stress and motor thermal dissipation saturation.`
+                    });
+                }
+
+                // Rule 3: Mechanical Misalignment (Vib >= 4.0 & Prod <= 1100)
+                if (vib >= 4.0 && prod <= 1100) {
+                    const baseMis = temp < 72 ? 80 : 70;
+                    const conf = Math.min(96, Math.round(baseMis + (vib - 4.0) * 3.5 + ((1100 - prod) / 400) * 12));
+                    hypotheses.push({
+                        cause: "Mechanical Misalignment & Coupling Stress",
+                        conf: conf,
+                        reason: `High radial vibration (${vib} mm/s) occurring alongside throughput throttling (${Math.round(prod)} u/h) signifies angular or parallel shaft coupling misalignment.`
+                    });
+                }
+
+                // Rule 4: Material Quality Issue (Defect >= 4.0%)
+                if (defect >= 4.0) {
+                    const sensorNormality = Math.max(0, 1.0 - (Math.max(0, temp - 60) * 0.03 + Math.max(0, vib - 2.5) * 0.15));
+                    let conf = Math.round(78 + Math.min(15, defect * 1.5) + (sensorNormality * 5));
+                    if (temp >= 85 || vib >= 5.5) conf = Math.min(conf, 65);
+                    conf = Math.min(96, conf);
+                    hypotheses.push({
+                        cause: "Material Quality Variation & Raw Stock Flaw",
+                        conf: conf,
+                        reason: `Scrap defect rate spiked to ${defect}% while mechanical sensors are relatively stable (temp ${temp}°C, vib ${vib} mm/s), indicating non-conforming incoming raw material.`
+                    });
+                }
+
+                // Rule 6: Cooling System Degradation
+                if (temp >= 65 && pwr < 28) {
+                    const conf = Math.min(94, Math.round(70 + (temp - 65) * 0.9 + Math.max(0, vib - 1.5) * 1.5));
+                    hypotheses.push({
+                        cause: "Cooling System Degradation & Radiator Fouling",
+                        conf: conf,
+                        reason: `Progressive thermal rise (${temp}°C) indicates heat dissipation degradation in the secondary cooling loop.`
+                    });
+                }
+
+                if (hypotheses.length === 0) {
+                    hypotheses.push({
+                        cause: "Unspecified Multivariate Operational Drift",
+                        conf: 62,
+                        reason: `Sensor channels deviated slightly from baseline: Temp ${temp}°C, Vib ${vib} mm/s, Power ${pwr} kW.`
+                    });
+                }
+
+                hypotheses.sort((a, b) => b.conf - a.conf);
+                primaryCause = hypotheses[0].cause;
+                primaryConf = hypotheses[0].conf;
+                aiExplanation = hypotheses[0].reason;
+
+                if (hypotheses.length > 1) {
+                    secondaryCause = `${hypotheses[1].cause} (${hypotheses[1].conf}%)`;
+                } else {
+                    secondaryCause = "None (High Primary Certainty)";
+                }
+            }
+
+            // 3. Operational Impact Prediction
+            let estDowntime = 0;
+            if (totalScore <= 25) estDowntime = 0;
+            else if (primaryCause.includes("Critical") || totalScore >= 75) estDowntime = Math.round(45 + Math.min(45, (totalScore - 75) * 1.8));
+            else if (primaryCause.includes("Bearing") || primaryCause.includes("Motor")) estDowntime = Math.round(25 + Math.min(30, (totalScore - 50) * 0.8));
+            else estDowntime = 20;
+
+            const hourlyDeficit = Math.max(0, 1400 - prod);
+            const stopLoss = (1400 / 60) * estDowntime;
+            const totalProdLoss = Math.round((hourlyDeficit * (estDowntime / 60)) + stopLoss);
+            const downstreamDelay = Math.max(0, estDowntime - 10);
+            const scrapUnits = Math.round((prod * 0.5) * (defect / 100));
+
+            let defectRiskLabel = "Low";
+            if (defect >= 8 || totalScore >= 75) defectRiskLabel = "Critical";
+            else if (defect >= 4 || totalScore >= 50) defectRiskLabel = "High";
+            else if (defect >= 1.5 || totalScore >= 25) defectRiskLabel = "Medium";
+
+            // 4. What-If 4 Recovery Strategies
+            const opt1_dt = Math.max(15, estDowntime);
+            const opt1_loss = Math.round((opt1_dt / 60) * 1400 * 0.9);
+            const opt1_score = Math.min(100, Math.round((15 + (opt1_dt / 60) * 35 + (opt1_loss / 500) * 20) * 10) / 10);
+
+            const opt2_dt = 10;
+            const opt2_loss = Math.round(((opt2_dt / 60) * 1400) + ((1400 * 0.40) * 2));
+            const opt2_score = Math.min(100, Math.round((22 + (opt2_loss / 600) * 25 + (10 / 30) * 15) * 10) / 10);
+
+            const opt3_dt = 5;
+            const opt3_loss = Math.round((opt3_dt / 60) * 1400 * 0.75);
+            const opt3_score = primaryCause.includes("Material") ? 65.0 : Math.min(100, Math.round((10 + (opt3_loss / 100) * 10 + (opt3_dt / 15) * 8) * 10) / 10);
+
+            const opt4_dt = Math.max(90, estDowntime * 3.5);
+            const opt4_loss = Math.round(Math.max(1800, prod * 2.8));
+            const opt4_score = 94.0;
+
+            const options = [
+                {
+                    id: 1,
+                    title: "Immediate Maintenance",
+                    icon: "🔧",
+                    action: "STOP_MAINTAIN",
+                    downtime: opt1_dt,
+                    loss: opt1_loss,
+                    risk: "Low",
+                    cost: "$450",
+                    score: opt1_score,
+                    tradeoff: "Eliminates catastrophic failure, but requires full line stoppage."
+                },
+                {
+                    id: 2,
+                    title: "Reduce Machine Speed",
+                    icon: "⚙️",
+                    action: "DERATE_SPEED",
+                    downtime: opt2_dt,
+                    loss: opt2_loss,
+                    risk: "Medium",
+                    cost: "$180",
+                    score: opt2_score,
+                    tradeoff: "Keeps machine running at 60% capacity with reduced thermal stress."
+                },
+                {
+                    id: 3,
+                    title: "Workload Redistribution",
+                    icon: "🔄",
+                    action: "REROUTE_WORKLOAD",
+                    downtime: opt3_dt,
+                    loss: opt3_loss,
+                    risk: primaryCause.includes("Material") ? "High" : "Low",
+                    cost: "$80",
+                    score: opt3_score,
+                    tradeoff: "Transfers active queue to parallel Line 3 with minimal switchover delay."
+                },
+                {
+                    id: 4,
+                    title: "Continue Without Intervention",
+                    icon: "⚠️",
+                    action: "CONTINUE_UNCHECKED",
+                    downtime: opt4_dt,
+                    loss: opt4_loss,
+                    risk: "Very High",
+                    cost: "$2,800",
+                    score: opt4_score,
+                    tradeoff: "Guarantees severe downstream bottleneck, acute scrap surge, and motor destruction."
+                }
+            ];
+
+            // 5. Best Decision Recommendation
+            let bestOpt = options[2]; // Workload Redistribution default
+            let recJustification = "Workload redistribution minimizes production loss and downstream disruption while allowing maintenance to be performed safely offline.";
+
+            if (primaryCause.includes("Material")) {
+                bestOpt = {
+                    id: 5,
+                    title: "Quarantine Batch & Material Audit",
+                    icon: "📦",
+                    action: "QUARANTINE_RAW_MATERIAL",
+                    score: 22.0
+                };
+                recJustification = "Mechanical machines are healthy, but scrap defect rate is abnormal. Quarantining the current raw coil lot prevents further defective output while switching to backup certified inventory.";
+            } else if (primaryCause.includes("Critical")) {
+                bestOpt = options[0]; // Immediate Maintenance
+                recJustification = "Severe multi-channel threshold breach. Immediate emergency maintenance is required to isolate power and prevent catastrophic spindle destruction.";
+            } else if (totalScore <= 25) {
+                bestOpt = {
+                    id: 0,
+                    title: "Maintain Standard Production",
+                    icon: "✅",
+                    action: "CONTINUE_NORMAL",
+                    score: 5.0
+                };
+                recJustification = "All physical health channels are nominal. No corrective intervention is needed at this time.";
+            } else {
+                // Pick lowest score among options 1-3
+                const candidate = [options[0], options[1], options[2]].sort((a, b) => a.score - b.score)[0];
+                bestOpt = candidate;
+                if (bestOpt.id === 1) {
+                    recJustification = "Immediate maintenance halts thermal runaway and bearing raceway destruction before catastrophic seizure occurs.";
+                } else if (bestOpt.id === 2) {
+                    recJustification = "Throttling machine speed by 40% alleviates thermal stress immediately while preserving active shift output.";
+                }
+            }
+
+            return {
+                anomalyScore: totalScore,
+                statusCategory,
+                badgeColor,
+                detectedIssues,
+                risks: { tempRisk, vibRisk, prodRisk, defectRisk, pwrRisk, presRisk },
+                rca: { primaryCause, primaryConf, secondaryCause, aiExplanation },
+                impact: { estDowntime, totalProdLoss, defectRiskLabel, scrapUnits, downstreamDelay },
+                options,
+                bestOption: bestOpt,
+                recJustification
+            };
+        }
+
+        // Render Dashboard UI
+        function updateDashboard(res, inputs) {
+            // 1. Anomaly Gauge
+            document.getElementById('disp_score_num').innerText = res.anomalyScore;
+            document.getElementById('disp_status_badge').innerText = res.statusCategory;
+            document.getElementById('disp_status_badge').style.background = res.badgeColor + '25';
+            document.getElementById('disp_status_badge').style.color = res.badgeColor;
+
+            const dashoffset = 251.2 * (1 - (res.anomalyScore / 100));
+            const arcElem = document.getElementById('gauge_arc');
+            arcElem.style.strokeDashoffset = dashoffset;
+            arcElem.style.stroke = res.badgeColor;
+
+            // Detected Issues
+            document.getElementById('disp_detected_issues').innerHTML = res.detectedIssues.map(i => `<div>✓ ${i}</div>`).join('');
+
+            // 2. Root Cause Analysis
+            document.getElementById('disp_primary_cause').innerText = res.rca.primaryCause;
+            document.getElementById('disp_confidence').innerText = `${res.rca.primaryConf}% CONFIDENCE`;
+            document.getElementById('disp_secondary_cause').innerText = res.rca.secondaryCause;
+            document.getElementById('disp_ai_explanation').innerText = `"${res.rca.aiExplanation}"`;
+
+            // Evidence Chips
+            document.getElementById('disp_evidence_chips').innerHTML = `
+                <div class="evidence-chip">Temp: ${inputs.temp}°C</div>
+                <div class="evidence-chip">Vib: ${inputs.vib} mm/s</div>
+                <div class="evidence-chip">Pressure: ${inputs.pres} kPa</div>
+                <div class="evidence-chip">Power: ${inputs.pwr} kW</div>
+                <div class="evidence-chip">Throughput: ${inputs.prod} u/h</div>
+                <div class="evidence-chip">Defect: ${inputs.defect}%</div>
+            `;
+
+            // 3. Operational Impact
+            document.getElementById('disp_downtime').innerText = `${res.impact.estDowntime} min`;
+            document.getElementById('disp_downtime_desc').innerText = res.impact.estDowntime > 0 ? "Estimated repair window" : "Line operating normally";
+            document.getElementById('disp_prod_loss').innerText = `${res.impact.totalProdLoss} units`;
+            document.getElementById('disp_defect_risk').innerText = res.impact.defectRiskLabel;
+            document.getElementById('disp_defect_risk').style.color = res.impact.defectRiskLabel === 'Critical' ? '#ef4444' : (res.impact.defectRiskLabel === 'High' ? '#f97316' : '#10b981');
+            document.getElementById('disp_scrap_units').innerText = `~${res.impact.scrapUnits} scrap units / batch`;
+            document.getElementById('disp_downstream_delay').innerText = `${res.impact.downstreamDelay} min`;
+
+            // 4. Recommendation Banner
+            document.getElementById('disp_rec_icon').innerText = res.bestOption.icon || "🔄";
+            document.getElementById('disp_rec_name').innerText = res.bestOption.title;
+            document.getElementById('disp_rec_why').innerText = `"${res.recJustification}"`;
+            document.getElementById('disp_rec_loss').innerText = res.bestOption.score;
+
+            // 5. Strategy Cards
+            const stratContainer = document.getElementById('strategies_container');
+            stratContainer.innerHTML = res.options.map(opt => {
+                const isRec = opt.id === res.bestOption.id;
+                return `
+                    <div class="strategy-card ${isRec ? 'recommended' : ''}">
+                        <div>
+                            <div class="strat-header">
+                                <span class="strat-title">${opt.icon} ${opt.title}</span>
+                                <span class="strat-tag ${isRec ? 'rec' : ''}">${isRec ? 'RECOMMENDED' : 'Option ' + opt.id}</span>
+                            </div>
+                            <ul class="strat-metric-list">
+                                <li class="strat-metric-item"><span>Downtime:</span><span>${opt.downtime} min</span></li>
+                                <li class="strat-metric-item"><span>Production Loss:</span><span>${opt.loss} units</span></li>
+                                <li class="strat-metric-item"><span>Defect Risk:</span><span>${opt.risk}</span></li>
+                                <li class="strat-metric-item"><span>Maintenance Cost:</span><span>${opt.cost}</span></li>
+                            </ul>
+                            <div style="font-size: 11px; color: var(--text-muted); line-height: 1.4; margin-bottom: 8px;">
+                                ${opt.tradeoff}
+                            </div>
+                        </div>
+                        <div class="strat-score-row">
+                            <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">LOSS SCORE</span>
+                            <span style="font-size: 18px; font-weight: 800; font-family: var(--font-mono); color: ${isRec ? 'var(--accent-emerald)' : 'var(--text-primary)'};">${opt.score}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // 6. Draw Charts
+            renderCharts(inputs, res);
+
+            // 7. Record History
+            addHistoryRecord(inputs.machine, res.anomalyScore, res.rca.primaryCause, res.bestOption.title);
+        }
+
+        // Canvas Chart Drawing Utilities
+        function renderCharts(inputs, res) {
+            // Chart 1: Temperature Gauge / Curve
+            drawBarRangeChart('canvas_temp', inputs.temp, 30, 65, 80, 110, '°C', '#ef4444');
+            document.getElementById('chart_temp_val').innerText = `${inputs.temp} °C`;
+
+            // Chart 2: Vibration Gauge / Curve
+            drawBarRangeChart('canvas_vib', inputs.vib, 0.5, 3.0, 5.0, 10, 'mm/s', '#8b5cf6');
+            document.getElementById('chart_vib_val').innerText = `${inputs.vib} mm/s`;
+
+            // Chart 3: Throughput Bar
+            drawThroughputChart('canvas_prod', inputs.prod, 1400);
+            document.getElementById('chart_prod_val').innerText = `${inputs.prod} u/h`;
+
+            // Chart 4: Risk Breakdown Radar / Multi-bar
+            drawRiskBarChart('canvas_radar', res.risks);
+
+            // Chart 5: Strategy Comparison Bar Chart
+            drawStrategyChart('canvas_strategies', res.options, res.bestOption.id);
+        }
+
+        function drawBarRangeChart(canvasId, currentVal, normMin, normMax, critVal, maxRange, unit, accentColor) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width = canvas.parentElement.clientWidth - 32;
+            const h = canvas.height = 180;
+            ctx.clearRect(0, 0, w, h);
+
+            // Draw baseline zone
+            const normX1 = (normMin / maxRange) * w;
+            const normX2 = (normMax / maxRange) * w;
+            ctx.fillStyle = 'rgba(16, 185, 129, 0.15)';
+            ctx.fillRect(normX1, 30, normX2 - normX1, 60);
+
+            // Draw warning & critical zone
+            const critX = (critVal / maxRange) * w;
+            ctx.fillStyle = 'rgba(239, 68, 68, 0.15)';
+            ctx.fillRect(critX, 30, w - critX, 60);
+
+            // Draw axis line
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(0, 60);
+            ctx.lineTo(w, 60);
+            ctx.stroke();
+
+            // Threshold lines
+            ctx.strokeStyle = '#10b981';
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath(); ctx.moveTo(normX2, 20); ctx.lineTo(normX2, 100); ctx.stroke();
+            ctx.strokeStyle = '#ef4444';
+            ctx.beginPath(); ctx.moveTo(critX, 20); ctx.lineTo(critX, 100); ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Current value pin
+            const curX = Math.min(w - 10, Math.max(10, (currentVal / maxRange) * w));
+            ctx.fillStyle = accentColor;
+            ctx.beginPath();
+            ctx.arc(curX, 60, 10, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Labels
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '11px sans-serif';
+            ctx.fillText(`0 ${unit}`, 5, 120);
+            ctx.fillText(`Normal Limit (${normMax})`, normX2 - 40, 120);
+            ctx.fillText(`Critical (${critVal})`, critX - 25, 120);
+            ctx.fillText(`Current: ${currentVal} ${unit}`, curX - 35, 20);
+        }
+
+        function drawThroughputChart(canvasId, currentVal, expectedVal) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width = canvas.parentElement.clientWidth - 32;
+            const h = canvas.height = 180;
+            ctx.clearRect(0, 0, w, h);
+
+            const maxVal = 1600;
+            const barW = 50;
+
+            // Expected bar
+            const expH = (expectedVal / maxVal) * 120;
+            ctx.fillStyle = '#334155';
+            ctx.fillRect(w/2 - 65, 150 - expH, barW, expH);
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '11px sans-serif';
+            ctx.fillText('Target', w/2 - 58, 168);
+            ctx.fillText(`${expectedVal}`, w/2 - 58, 140 - expH);
+
+            // Current bar
+            const curH = (currentVal / maxVal) * 120;
+            const barColor = currentVal >= expectedVal * 0.9 ? '#10b981' : (currentVal >= expectedVal * 0.7 ? '#f59e0b' : '#ef4444');
+            ctx.fillStyle = barColor;
+            ctx.fillRect(w/2 + 15, 150 - curH, barW, curH);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillText('Actual', w/2 + 22, 168);
+            ctx.fillText(`${currentVal}`, w/2 + 22, 140 - curH);
+        }
+
+        function drawRiskBarChart(canvasId, risks) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width = canvas.parentElement.clientWidth - 32;
+            const h = canvas.height = 180;
+            ctx.clearRect(0, 0, w, h);
+
+            const labels = ['Temp', 'Vib', 'Prod', 'Defect', 'Pwr', 'Pres'];
+            const vals = [risks.tempRisk, risks.vibRisk, risks.prodRisk, risks.defectRisk, risks.pwrRisk, risks.pressureRisk];
+            const maxVal = 25;
+            const barW = (w - 60) / labels.length;
+
+            vals.forEach((v, i) => {
+                const x = 30 + i * (barW + 6);
+                const barH = (v / maxVal) * 110;
+                ctx.fillStyle = v > 15 ? '#ef4444' : (v > 7 ? '#f59e0b' : '#3b82f6');
+                ctx.fillRect(x, 140 - barH, barW, barH);
+
+                ctx.fillStyle = '#94a3b8';
+                ctx.font = '10px sans-serif';
+                ctx.fillText(labels[i], x + 2, 158);
+                ctx.fillText(v.toFixed(1), x + 2, 134 - barH);
+            });
+        }
+
+        function drawStrategyChart(canvasId, options, bestId) {
+            const canvas = document.getElementById(canvasId);
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width = canvas.parentElement.clientWidth - 32;
+            const h = canvas.height = 180;
+            ctx.clearRect(0, 0, w, h);
+
+            const barW = (w - 70) / options.length;
+            options.forEach((opt, i) => {
+                const x = 40 + i * (barW + 10);
+                const barH = (opt.score / 100) * 110;
+                const isBest = opt.id === bestId;
+
+                ctx.fillStyle = isBest ? '#10b981' : (opt.score > 70 ? '#ef4444' : '#3b82f6');
+                ctx.fillRect(x, 140 - barH, barW, barH);
+
+                if (isBest) {
+                    ctx.strokeStyle = '#ffffff';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(x, 140 - barH, barW, barH);
+                }
+
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '11px sans-serif';
+                ctx.fillText(opt.score, x + barW / 2 - 10, 132 - barH);
+
+                ctx.fillStyle = isBest ? '#10b981' : '#94a3b8';
+                ctx.font = '10px sans-serif';
+                const shortTitle = opt.title.split(' ')[0] + '...';
+                ctx.fillText(shortTitle, x, 158);
+            });
+        }
+
+        // Animate Decision Flow Pipeline
+        function animatePipeline(callback) {
+            const steps = ['flow-input', 'flow-anomaly', 'flow-rca', 'flow-impact', 'flow-whatif', 'flow-decision', 'flow-recovery'];
+            steps.forEach(s => document.getElementById(s).className = 'flow-step');
+
+            let index = 0;
+            const interval = setInterval(() => {
+                if (index > 0) document.getElementById(steps[index - 1]).className = 'flow-step completed';
+                if (index < steps.length) {
+                    document.getElementById(steps[index]).className = 'flow-step active';
+                    index++;
+                } else {
+                    clearInterval(interval);
+                    if (callback) callback();
+                }
+            }, 90);
+        }
+
+        // Main Execution Handler
+        function executeSimulation() {
+            const inputs = {
+                machine: document.getElementById('inp_machine').value,
+                temp: parseFloat(document.getElementById('inp_temp').value),
+                vib: parseFloat(document.getElementById('inp_vib').value),
+                pres: parseFloat(document.getElementById('inp_pres').value),
+                pwr: parseFloat(document.getElementById('inp_pwr').value),
+                prod: parseFloat(document.getElementById('inp_prod').value),
+                defect: parseFloat(document.getElementById('inp_defect').value),
+                status: document.getElementById('inp_status').value,
+                maint: document.getElementById('inp_maint').value
+            };
+
+            animatePipeline(() => {
+                const results = calculateSimulation(inputs);
+                updateDashboard(results, inputs);
+            });
+        }
+
+        // Demo Mode Automation
+        function runDemoMode() {
+            const btn = document.getElementById('btnRunDemo');
+            btn.disabled = true;
+            btn.innerText = "🎬 DEMO RUNNING...";
+
+            const demoSequence = ['normal', 'bearing', 'critical', 'normal'];
+            let step = 0;
+
+            const demoTimer = setInterval(() => {
+                if (step < demoSequence.length) {
+                    loadScenario(demoSequence[step], null);
+                    step++;
+                } else {
+                    clearInterval(demoTimer);
+                    btn.disabled = false;
+                    btn.innerText = "🎬 RUN FULL DEMO";
+                }
+            }, 3000);
+        }
+
+        // Simulation History
+        let historyData = [];
+
+        function addHistoryRecord(machine, score, cause, action) {
+            const time = new Date().toLocaleTimeString();
+            historyData.unshift({ time, machine, score, cause, action });
+            if (historyData.length > 8) historyData.pop();
+
+            const tbody = document.getElementById('history_tbody');
+            tbody.innerHTML = historyData.map((h, idx) => `
+                <tr>
+                    <td>${h.time}</td>
+                    <td><span style="font-weight: 700; color: #ffffff;">${h.machine}</span></td>
+                    <td><span style="font-family: var(--font-mono); font-weight: 700; color: ${h.score > 50 ? '#ef4444' : '#10b981'};">${h.score}/100</span></td>
+                    <td>${h.cause}</td>
+                    <td><span style="color: var(--accent-cyan); font-weight: 600;">${h.action}</span></td>
+                    <td><button class="history-action-btn" onclick="restoreHistory(${idx})">Load</button></td>
+                </tr>
+            `).join('');
+        }
+
+        function restoreHistory(idx) {
+            // Restore record
+            executeSimulation();
+        }
+
+        function clearHistory() {
+            historyData = [];
+            document.getElementById('history_tbody').innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">History cleared.</td></tr>';
+        }
+
+        // Initial launch
+        window.addEventListener('load', () => {
+            executeSimulation();
+        });
+
+        window.addEventListener('resize', () => {
+            executeSimulation();
+        });
+    </script>
+</body>
+</html>

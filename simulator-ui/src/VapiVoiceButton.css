@@ -1,0 +1,55 @@
+.vapi-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid #333;
+  background: #111;
+  color: #fff;
+  margin-left: 1rem;
+}
+
+.vapi-button:hover:not(:disabled) {
+  background: #222;
+  border-color: #555;
+}
+
+.vapi-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.vapi-button.active {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.5);
+  color: #ef4444;
+  animation: pulseBorder 2s infinite;
+}
+
+.vapi-button.active:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.vapi-status-text {
+  font-size: 0.8rem;
+  opacity: 0.8;
+  margin-left: 0.5rem;
+  font-weight: normal;
+}
+
+@keyframes pulseBorder {
+  0% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
+}

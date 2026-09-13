@@ -1,0 +1,339 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.healthyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 70vh;
+  gap: var(--spacing-lg);
+  color: var(--text-secondary);
+}
+
+.iconSuccess {
+  color: var(--green);
+}
+
+.healthyTitle {
+  font-size: 2rem;
+  letter-spacing: 0.1em;
+  color: var(--green);
+  margin: 0;
+}
+
+.healthyMetrics {
+  display: flex;
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-lg);
+}
+
+.hMetric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.hMetric span {
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.hMetric strong {
+  font-size: 1.5rem;
+  color: var(--text);
+}
+
+.textGreen { color: var(--green) !important; }
+
+/* Incident Layout */
+.layoutGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-2xl);
+}
+
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.incidentHero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  border-bottom: 2px solid var(--red);
+  padding-bottom: var(--spacing-md);
+}
+
+.incidentTag {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.machineId {
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.incidentTitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.1;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.blockLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  margin-bottom: var(--spacing-sm);
+}
+
+.telemetryItems {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+.anomalyItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--background);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--amber);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+}
+
+.arrowUp { color: var(--red); font-weight: bold; }
+.arrowDown { color: var(--red); font-weight: bold; }
+
+.causeContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(245, 158, 11, 0.05);
+  border-left: 4px solid var(--amber);
+  padding: var(--spacing-md);
+}
+
+.causeTitle {
+  font-size: 1.25rem;
+  margin: 0;
+  color: var(--text);
+}
+
+.confidenceScore {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.confidenceScore strong {
+  font-size: 1.5rem;
+  color: var(--amber);
+  line-height: 1;
+}
+
+.impactGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-md);
+  border-top: 1px solid var(--surface-border);
+  padding-top: var(--spacing-lg);
+}
+
+.impactBox {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.impactLabel {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.impactValue {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.impactValueBad {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--red);
+}
+
+.analyzeBtn {
+  align-self: flex-start;
+  margin-top: var(--spacing-sm);
+}
+
+/* Right Column */
+.rightCol {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.recommendationPanel {
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  box-shadow: var(--glow-primary);
+  border: 1px solid rgba(124, 58, 237, 0.3);
+}
+
+.recHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(124, 58, 237, 0.2);
+  padding-bottom: var(--spacing-sm);
+}
+
+.recLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--violet-bright);
+  letter-spacing: 0.1em;
+}
+
+.recConfidence {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.recConfidence strong {
+  color: var(--violet-bright);
+}
+
+.recTitle {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--violet-bright);
+  margin: 0;
+}
+
+.recRationale {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.recMetrics {
+  display: flex;
+  gap: var(--spacing-xl);
+  margin: var(--spacing-sm) 0;
+}
+
+.rMetric {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rMetric span {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.rMetric strong {
+  font-size: 1.125rem;
+  color: var(--text);
+}
+
+.recActions {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);
+}
+
+.topologyPanel {
+  background: var(--background);
+}
+
+.panelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.panelTitle {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+}
+
+.topologyLine {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.topologyNodeWrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.topologyNode {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: var(--surface);
+  border: 2px solid var(--green);
+  color: var(--text);
+}
+
+.top_warning {
+  border-color: var(--amber);
+  color: var(--amber);
+}
+
+.top_critical {
+  border-color: var(--red);
+  color: var(--red);
+  animation: pulse-red 2s infinite;
+}
+
+.top_stopped {
+  border-color: var(--text-muted);
+  color: var(--text-muted);
+}
+
+.topologyArrow {
+  color: var(--text-muted);
+}

@@ -1,0 +1,82 @@
+.metricCard {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Intents */
+.metricCard.success::after,
+.metricCard.warning::after,
+.metricCard.critical::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 4px;
+}
+
+.metricCard.success::after { background-color: var(--green); }
+.metricCard.warning::after { background-color: var(--amber); }
+.metricCard.critical::after { background-color: var(--red); }
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-sm);
+}
+
+.title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.icon {
+  color: var(--text-muted);
+}
+
+.content {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xs);
+}
+
+.value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text);
+  font-family: var(--font-sans);
+  letter-spacing: -0.025em;
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.trend {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.trend-up { color: var(--amber); } /* Up can be bad for temp/vibration, we might need context, but let's default to a color or manage it via props if needed. Actually let's make it generic or explicitly passed. For now, neutral color */
+.trend-down { color: var(--green); }
+
+/* Let's redefine trend colors to be contextual in usage, so here they just provide the arrow. 
+   Actually, it's safer to let the parent pass color if needed, but for now we'll do: */
+.trend-up { color: var(--amber); }
+.trend-down { color: var(--green); }
+.trend-neutral { color: var(--text-muted); }
+
+.trendLabel {
+  color: var(--text-muted);
+  font-weight: 400;
+}

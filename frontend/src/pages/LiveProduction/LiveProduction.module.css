@@ -1,0 +1,328 @@
+.container {
+  display: flex;
+  height: calc(100vh - 140px); /* Fill remaining height */
+  overflow: hidden;
+  position: relative;
+  margin: calc(var(--spacing-xl) * -1); /* Break out of page padding to reach edges */
+  background: var(--surface-secondary);
+}
+
+.topologyArea {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+  transition: padding-right var(--transition-normal);
+}
+
+.header {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.subtitle {
+  color: var(--text-secondary);
+}
+
+/* Vertical Topology Flow */
+.topologyFlow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 600px;
+  margin: 0 auto;
+  padding-bottom: var(--spacing-2xl);
+}
+
+.externalNode {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  border: 1px dashed var(--surface-border);
+  padding: var(--spacing-md) var(--spacing-xl);
+  border-radius: var(--radius-sm);
+  background: var(--background);
+}
+
+.flowArrow {
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--text-muted);
+}
+
+.flowArrowCritical {
+  color: var(--red);
+  animation: pulse-red 2s infinite;
+}
+
+.vertNodeWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.vertNode {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--surface);
+  border: 2px solid var(--surface-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md) var(--spacing-xl);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.vertNode:hover {
+  transform: translateY(-2px);
+  border-color: var(--blue);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+}
+
+.selectedNode {
+  border-color: var(--violet-bright) !important;
+  box-shadow: 0 0 0 2px var(--violet-transparent);
+}
+
+.vert_healthy { border-left: 4px solid var(--green); }
+.vert_warning { border-color: var(--amber); border-left: 4px solid var(--amber); }
+.vert_critical { border-color: var(--red); border-left: 4px solid var(--red); }
+
+.nodeIdentity {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.nodeId {
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.nodeName {
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.nodeStats {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.nodeThroughput {
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+.statRow {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.statLabel {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.statValue {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--text);
+}
+
+.nodeBadge {
+  margin-left: auto;
+}
+
+/* Right Drawer */
+.rightDrawer {
+  width: 400px;
+  background: var(--surface);
+  border-left: 1px solid var(--surface-border);
+  display: flex;
+  flex-direction: column;
+  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+  animation: slide-in 0.3s ease-out forwards;
+}
+
+@keyframes slide-in {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.drawerHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: var(--spacing-xl);
+  border-bottom: 1px solid var(--surface-border);
+  background: var(--background);
+}
+
+.drawerTitle {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.drawerMachineId {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.drawerMachineName {
+  color: var(--text-secondary);
+}
+
+.closeBtn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+}
+
+.closeBtn:hover {
+  color: var(--text);
+}
+
+.drawerContent {
+  padding: var(--spacing-xl);
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.drawerStatusRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.whyCriticalBlock {
+  background: var(--violet-transparent);
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  border-left: 4px solid var(--violet-bright);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-sm);
+  box-shadow: inset 0 0 20px rgba(124, 58, 237, 0.05);
+}
+
+.whyHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--violet-bright);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--spacing-sm);
+}
+
+.whyList {
+  margin: 0;
+  padding-left: var(--spacing-lg);
+  color: var(--text);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.causeSection {
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid rgba(124, 58, 237, 0.2);
+}
+
+.causeDesc {
+  color: var(--text);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin: 0 0 4px 0;
+}
+
+.causeConf {
+  font-size: 0.875rem;
+  color: var(--red);
+  font-weight: 600;
+  margin: 0;
+}
+
+.viewIncidentBtn {
+  margin-top: var(--spacing-lg);
+  width: 100%;
+  background: var(--violet);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.viewIncidentBtn:hover {
+  background: var(--violet-bright);
+  box-shadow: var(--glow-primary);
+}
+
+.telemetryGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.tCard {
+  background: var(--background);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-md);
+}
+
+.tCardHeader {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.tCardValue {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: var(--spacing-md);
+}
+
+.tCardValue small {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-weight: normal;
+}
+
+.textRed {
+  color: var(--red) !important;
+}
+
+.tCardChart {
+  height: 60px;
+}

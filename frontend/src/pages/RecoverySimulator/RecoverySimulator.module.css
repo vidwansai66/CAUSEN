@@ -1,0 +1,285 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  color: var(--text-secondary);
+  gap: var(--spacing-md);
+}
+
+.icon {
+  color: var(--text-muted);
+}
+
+.header h2 {
+  font-size: 1.5rem;
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  color: var(--text-secondary);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: var(--spacing-xl);
+}
+
+.optionsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.actionItem {
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+}
+
+.actionItem:hover {
+  border-color: var(--text-muted);
+}
+
+.actionItem.selected {
+  border-color: var(--blue);
+  background: rgba(59, 130, 246, 0.05);
+  box-shadow: 0 0 0 1px var(--blue);
+}
+
+.recBadge {
+  position: absolute;
+  top: -10px;
+  right: 12px;
+}
+
+.actionItemHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+}
+
+.actionIcon {
+  color: var(--text-secondary);
+  background: var(--background);
+  padding: 8px;
+  border-radius: var(--radius-sm);
+}
+
+.selected .actionIcon {
+  color: var(--blue);
+}
+
+.actionTitleInfo h4 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.actionType {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.actionDesc {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.simulationPanel {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  box-shadow: var(--glow-primary);
+  border: 1px solid rgba(124, 58, 237, 0.3);
+}
+
+.simHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--surface-border);
+  margin-bottom: var(--spacing-lg);
+}
+
+.simTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.simTitle h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--text);
+}
+
+.simConfidence {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.simConfidence strong {
+  color: var(--violet-bright);
+}
+
+.comparisonGrid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-xl);
+}
+
+.column {
+  flex: 1;
+  background: var(--background);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  border: 1px solid var(--surface-border);
+}
+
+.vsColumn {
+  padding: 0 var(--spacing-lg);
+}
+
+.columnHeader, .columnHeaderAi {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.dataBadge {
+  font-size: 0.65rem !important;
+  padding: 2px 6px !important;
+}
+
+.columnHeader { color: var(--text-secondary); }
+.columnHeaderAi { color: var(--violet-bright); border-bottom-color: rgba(124, 58, 237, 0.3); }
+
+.metricRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) 0;
+}
+
+.metricLabel {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.metricValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.metricValueBad {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--red);
+}
+
+.metricValueGood {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--green);
+}
+
+.rationaleBox {
+  background: var(--surface-hover);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--violet-bright);
+  margin-bottom: var(--spacing-xl);
+}
+
+.rationaleLabel {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--violet-bright);
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.rationaleBox p {
+  font-size: 0.875rem;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.actionFooter {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: auto;
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--surface-border);
+}
+
+.controlPanel {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-xl);
+  background: var(--surface-hover);
+  border: 1px solid var(--surface-border);
+  margin-bottom: var(--spacing-xl);
+  flex-wrap: wrap;
+}
+
+.controlGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  min-width: 200px;
+  flex: 1;
+}
+
+.controlGroup label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.controlSelect {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--surface-border);
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.controlSelect:focus {
+  border-color: var(--violet-bright);
+}
+
+.controlActions {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+}

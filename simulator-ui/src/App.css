@@ -1,0 +1,234 @@
+:root {
+  --bg-color: #0f1115;
+  --panel-bg: #1a1d24;
+  --border-color: #2b303b;
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --accent-blue: #0ea5e9;
+  
+  --status-healthy: #10b981;
+  --status-warning: #f59e0b;
+  --status-critical: #ef4444;
+  --status-recovering: #3b82f6;
+
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  overflow-x: hidden;
+}
+
+.simulator-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: var(--panel-bg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.status-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-weight: bold;
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+}
+
+.status-badge.healthy { background-color: rgba(16, 185, 129, 0.1); color: var(--status-healthy); border: 1px solid var(--status-healthy); }
+.status-badge.warning { background-color: rgba(245, 158, 11, 0.1); color: var(--status-warning); border: 1px solid var(--status-warning); }
+.status-badge.critical { background-color: rgba(239, 68, 68, 0.1); color: var(--status-critical); border: 1px solid var(--status-critical); }
+.status-badge.recovering { background-color: rgba(59, 130, 246, 0.1); color: var(--status-recovering); border: 1px solid var(--status-recovering); }
+
+.main-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.control-panel {
+  width: 320px;
+  background-color: var(--panel-bg);
+  border-right: 1px solid var(--border-color);
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.control-group label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.control-select {
+  background-color: #111318;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.75rem;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  outline: none;
+}
+
+.control-select:focus {
+  border-color: var(--accent-blue);
+}
+
+.btn {
+  padding: 1rem;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-inject {
+  background-color: var(--status-critical);
+  color: white;
+}
+
+.btn-inject:hover:not(:disabled) {
+  background-color: #dc2626;
+}
+
+.btn-reset {
+  background-color: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.btn-reset:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: var(--text-secondary);
+}
+
+.machine-grid-container {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.machine-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.machine-card {
+  background-color: var(--panel-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  transition: border-color 0.3s ease;
+}
+
+.machine-card.healthy { border-top: 4px solid var(--status-healthy); }
+.machine-card.warning { border-top: 4px solid var(--status-warning); border-color: rgba(245, 158, 11, 0.3); }
+.machine-card.critical { border-top: 4px solid var(--status-critical); border-color: rgba(239, 68, 68, 0.3); background-color: rgba(239, 68, 68, 0.02); }
+.machine-card.recovering { border-top: 4px solid var(--status-recovering); border-color: rgba(59, 130, 246, 0.3); }
+
+.machine-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.machine-id {
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-family: var(--font-mono);
+}
+
+.machine-name {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.machine-status-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.machine-status-icon.healthy { color: var(--status-healthy); }
+.machine-status-icon.warning { color: var(--status-warning); }
+.machine-status-icon.critical { color: var(--status-critical); }
+.machine-status-icon.recovering { color: var(--status-recovering); }
+
+.telemetry-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.telemetry-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.telemetry-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+}
+
+.telemetry-value {
+  font-size: 1.125rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+}
