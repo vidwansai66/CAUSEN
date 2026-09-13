@@ -120,7 +120,8 @@ def resolve_approval(request: ApprovalResolveRequest):
 
 @app.get("/api/vapi/token")
 def get_vapi_token():
-    vapi_key = os.getenv("VAPI_API_KEY")
+    # Web SDK requires the Public Key, not the Private API Key
+    vapi_key = os.getenv("VAPI_PUBLIC_KEY") or os.getenv("VAPI_API_KEY")
     assistant_id = os.getenv("VAPI_ASSISTANT_ID")
     
     if not vapi_key or not assistant_id:
