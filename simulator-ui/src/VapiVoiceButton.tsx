@@ -27,7 +27,7 @@ export const VapiVoiceButton = () => {
 
     try {
       setStatus('Connecting...');
-      const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8001';
+      const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://causen.onrender.com';
       const response = await fetch(`${baseUrl}/api/vapi/token`);
       if (!response.ok) {
         throw new Error(`Failed to fetch Vapi key: ${response.status}`);
