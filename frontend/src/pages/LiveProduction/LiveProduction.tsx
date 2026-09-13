@@ -18,8 +18,31 @@ const generateTrendData = (baseValue: number, isAnomaly: boolean, type: 'up' | '
 };
 
 export default function LiveProduction() {
-  const { state, machines, rootCause } = useDemoState();
+  const { state, machines, rootCause, connectionStatus } = useDemoState();
   const [selectedMachineId, setSelectedMachineId] = useState<string | null>(null);
+
+  if (connectionStatus === 'OFFLINE') {
+    return (
+      <div className={styles.container} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'var(--red)' }}>
+        <div style={{ textAlign: 'center' }}>
+          <AlertTriangle size={64} style={{ margin: '0 auto 1rem' }} />
+          <h2>Backend unavailable</h2>
+          <p>Cannot reach industrial backend. Please check connection.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (connectionStatus === 'CONNECTING' && machines.length === 0) {
+    return (
+      <div className={styles.container} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', color: 'var(--text-secondary)' }}>
+        <div style={{ textAlign: 'center' }}>
+          <h2>Loading...</h2>
+          <p>Waiting for telemetry...</p>
+        </div>
+      </div>
+    );
+  }
 
   const selectedMachine = machines.find(m => m.id === selectedMachineId);
   const isSelectedMachineCritical = selectedMachine?.state === 'CRITICAL' || selectedMachine?.state === 'WARNING';
