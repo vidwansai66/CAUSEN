@@ -39,6 +39,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "https://causen-beta.vercel.app",
+        "https://causen-h36s.vercel.app",
         "http://localhost:5173",
         "http://127.0.0.1:5173"
     ],

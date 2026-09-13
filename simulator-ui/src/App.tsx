@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { Machine } from './useSimulator';
 import { useSimulator } from './useSimulator';
 import { Activity, AlertTriangle, CheckCircle, Flame, Server, RotateCcw, AlertOctagon, Check, X } from 'lucide-react';
+import { API_BASE_URL } from './config';
 import './App.css';
 
 function App() {
@@ -18,7 +19,7 @@ function App() {
       <div style={{ padding: '2rem', color: 'red', fontFamily: 'monospace' }}>
         <h2>Connection Error</h2>
         <p>Could not connect to Simulator Backend: {error}</p>
-        <p>Ensure backend is running: <code>uvicorn backend.main:app --reload --port 8001</code></p>
+        <p>Ensure backend is running at {API_BASE_URL}</p>
       </div>
     );
   }
