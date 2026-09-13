@@ -3,12 +3,12 @@ import { useDemoState } from '../../hooks/useDemoState';
 import { Card } from '../../components/common/Card';
 import { Button } from '../../components/common/Button';
 import { Badge } from '../../components/common/Badge';
-import { Play, ArrowRight, Settings, Activity, ShieldAlert, GitBranch, PauseCircle, Flame, RotateCcw } from 'lucide-react';
+import { Play, ArrowRight, Settings, Activity, ShieldAlert, GitBranch, PauseCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import styles from './RecoverySimulator.module.css';
 
 export default function RecoverySimulator() {
-  const { incident, impact, recoveryActions, injectFault, resetFactory, machines, state, executeRecoveryAction } = useDemoState();
+  const { incident, impact, recoveryActions, executeRecoveryAction } = useDemoState();
   const navigate = useNavigate();
   
   const recommendedActionId = recoveryActions?.[0]?.id || '';

@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { Settings2, RotateCcw, Zap } from 'lucide-react';
 import { useDemoState } from '../../hooks/useDemoState';
 import { API_BASE_URL } from '../../config';
 import styles from './DemoController.module.css';
@@ -7,8 +6,6 @@ import styles from './DemoController.module.css';
 export const DemoController: React.FC = () => {
   const { state, connectionStatus } = useDemoState();
   const [isVisible, setIsVisible] = useState(false);
-  const [isInjecting, setIsInjecting] = useState(false);
-  const [isResetting, setIsResetting] = useState(false);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -22,7 +19,6 @@ export const DemoController: React.FC = () => {
   }, []);
 
   const handleInjectFault = async () => {
-    setIsInjecting(true);
     try {
       await fetch(`${API_BASE_URL}/api/fault/inject`, { 
         method: 'POST',
@@ -31,19 +27,14 @@ export const DemoController: React.FC = () => {
       });
     } catch (e) {
       console.error(e);
-    } finally {
-      setIsInjecting(false);
     }
   };
 
   const handleReset = async () => {
-    setIsResetting(true);
     try {
       await fetch(`${API_BASE_URL}/api/fault/reset`, { method: 'POST' });
     } catch (e) {
       console.error(e);
-    } finally {
-      setIsResetting(false);
     }
   };
 
@@ -59,7 +50,7 @@ export const DemoController: React.FC = () => {
         <button className={styles.button} onClick={handleReset}>
           RESET TO HEALTHY
         </button>
-        <button className={`${styles.button} ${styles.active}`} onClick={handleInject}>
+        <button className={`${styles.button} ${styles.active}`} onClick={handleInjectFault}>
           INJECT M03 FAULT
         </button>
       </div>
