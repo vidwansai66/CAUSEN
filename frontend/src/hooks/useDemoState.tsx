@@ -55,6 +55,7 @@ export function DemoProvider({ children }: { children: ReactNode }) {
           setConnectionStatus('CONNECTED');
         }
       } catch (error) {
+        console.error("useDemoState fetch error:", error);
         if (isMounted) {
           setConnectionStatus('OFFLINE');
         }
