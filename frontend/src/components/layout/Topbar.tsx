@@ -1,5 +1,5 @@
-import React from 'react';
-import { Bell, Search, User, Sun, Moon } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Bell, User, Sun, Moon } from 'lucide-react';
 import { useDemoState } from '../../hooks/useDemoState';
 import { useTheme } from '../../hooks/useTheme';
 import { Badge } from '../common/Badge';
@@ -9,6 +9,18 @@ import styles from './Topbar.module.css';
 export const Topbar: React.FC = () => {
   const { state, incident } = useDemoState();
   const { theme, toggleTheme } = useTheme();
+  
+  const [currentTime, setCurrentTime] = useState<string>('');
+
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      setCurrentTime(now.toLocaleTimeString('en-US', { hour12: false }));
+    };
+    updateTime();
+    const timer = setInterval(updateTime, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const getStatusDisplay = () => {
     switch (state) {
@@ -39,15 +51,12 @@ export const Topbar: React.FC = () => {
           {incident && incident.status === 'ACTIVE' && (
             <span className={styles.incidentRef}>{incident.id}</span>
           )}
-          <span className={styles.timestamp}>10:42:04</span>
+          <span className={styles.timestamp}>{currentTime}</span>
         </div>
       </div>
 
       <div className={styles.actions}>
-        <div className={styles.search}>
-          <Search size={18} className={styles.searchIcon} />
-          <input type="text" placeholder="Search resources..." className={styles.searchInput} />
-        </div>
+
         
         <button className={styles.iconBtn} onClick={toggleTheme} aria-label="Toggle Theme">
           {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}

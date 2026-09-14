@@ -8,43 +8,50 @@ export default function SystemActivity() {
   
   let activities: {id: string, timestamp: string, type: string, message: string}[] = [];
 
+  const now = new Date();
+  const formatTime = (date: Date) => date.toLocaleTimeString('en-US', { hour12: false });
+  const timeMinusSecs = (seconds: number) => formatTime(new Date(now.getTime() - seconds * 1000));
+  const timeMinusMins = (minutes: number) => formatTime(new Date(now.getTime() - minutes * 60000));
+
   if (state === 'NORMAL') {
     activities = [
-      { id: '1', timestamp: '08:00:00', type: 'INFO', message: 'System initialization complete.' },
-      { id: '2', timestamp: '09:15:30', type: 'INFO', message: 'Routine diagnostic passed on M05.' }
+      { id: '1', timestamp: timeMinusMins(120), type: 'INFO', message: 'System initialization complete.' },
+      { id: '2', timestamp: timeMinusMins(45), type: 'INFO', message: 'Routine diagnostic passed on M05.' }
     ];
   } else if (state === 'WARNING') {
     activities = [
-      { id: '1', timestamp: '10:41:00', type: 'WARNING', message: 'Vibration increase detected on M03.' }
+      { id: '1', timestamp: timeMinusSecs(30), type: 'WARNING', message: 'Vibration increase detected on M03.' }
     ];
   } else if (state === 'CRITICAL' || state === 'RECOVERY' || state === 'RECOVERY_COMPLETE') {
     const machineId = incident?.affectedMachineId || 'Unknown Machine';
     const causeDesc = rootCause?.description || 'Unknown Cause';
     
+    // In demo, we pretend the incident started 2 minutes ago
     activities = [
-      { id: '1', timestamp: '10:41:12', type: 'CRITICAL', message: `Anomaly detected — ${machineId}` },
-      { id: '2', timestamp: '10:41:18', type: 'CRITICAL', message: 'Incident classified — CRITICAL' },
-      { id: '3', timestamp: '10:41:22', type: 'INFO', message: 'Evidence correlation completed' },
-      { id: '4', timestamp: '10:41:25', type: 'WARNING', message: `Root cause identified — ${causeDesc}` },
-      { id: '5', timestamp: '10:41:27', type: 'INFO', message: 'Recovery simulations generated' }
+      { id: '1', timestamp: timeMinusSecs(120), type: 'CRITICAL', message: `Anomaly detected — ${machineId}` },
+      { id: '2', timestamp: timeMinusSecs(115), type: 'CRITICAL', message: 'Incident classified — CRITICAL' },
+      { id: '3', timestamp: timeMinusSecs(110), type: 'INFO', message: 'Evidence correlation completed' },
+      { id: '4', timestamp: timeMinusSecs(105), type: 'WARNING', message: `Root cause identified — ${causeDesc}` },
+      { id: '5', timestamp: timeMinusSecs(100), type: 'INFO', message: 'Recovery simulations generated' }
     ];
     
     if (state === 'RECOVERY' || state === 'RECOVERY_COMPLETE') {
-    if (workflowActivity && workflowActivity.length > 0) {
-      workflowActivity.forEach((w, i) => {
-        activities.push({
-          id: `w-${i}`,
-          timestamp: w.timestamp,
-          type: 'INFO',
-          message: w.name
+      if (workflowActivity && workflowActivity.length > 0) {
+        // Space workflow activities slightly
+        workflowActivity.forEach((w, i) => {
+          activities.push({
+            id: `w-${i}`,
+            timestamp: timeMinusSecs(60 - (i * 2)),
+            type: 'INFO',
+            message: w.name
+          });
         });
-      });
-    }
-    if (state === 'RECOVERY_COMPLETE') {
-      activities.push({
-        id: 'r-done', timestamp: 'Just now', type: 'SUCCESS', message: 'Recovery completed successfully.'
-      });
-    }
+      }
+      if (state === 'RECOVERY_COMPLETE') {
+        activities.push({
+          id: 'r-done', timestamp: formatTime(now), type: 'SUCCESS', message: 'Recovery completed successfully.'
+        });
+      }
     }
   }
 
