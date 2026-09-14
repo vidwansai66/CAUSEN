@@ -36,6 +36,12 @@ export function DemoProvider({ children }: { children: ReactNode }) {
   const [connectionStatus, setConnectionStatus] = useState<'CONNECTING' | 'CONNECTED' | 'OFFLINE'>('CONNECTING');
 
   useEffect(() => {
+    if (state === 'NORMAL' || state === 'RECOVERY_COMPLETE') {
+      setSelectedActionId(null);
+    }
+  }, [state]);
+
+  useEffect(() => {
     let isMounted = true;
     
     const fetchState = async () => {
@@ -83,14 +89,17 @@ export function DemoProvider({ children }: { children: ReactNode }) {
         
         if (!response.ok) {
             console.error('Failed to execute recovery action, status:', response.status);
+            setSelectedActionId(null);
         } else {
             const data = await response.json();
             if (data.execution_status === 'INVALID_ACTION') {
                 console.error('Backend rejected action:', data.message);
+                setSelectedActionId(null);
             }
         }
     } catch (e) {
         console.error('Failed to execute recovery action:', e);
+        setSelectedActionId(null);
     }
   };
 

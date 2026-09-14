@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from './RecoverySimulator.module.css';
 
 export default function RecoverySimulator() {
-  const { incident, impact, recoveryActions, executeRecoveryAction } = useDemoState();
+  const { incident, impact, recoveryActions, executeRecoveryAction, state, selectedActionId: executedActionId } = useDemoState();
   const navigate = useNavigate();
   
   const recommendedActionId = recoveryActions?.[0]?.id || '';
@@ -151,8 +151,8 @@ export default function RecoverySimulator() {
           </div>
 
           <div className={styles.actionFooter}>
-            <Button size="lg" variant="primary" onClick={handleExecute}>
-              Execute Action
+            <Button size="lg" variant="primary" onClick={handleExecute} disabled={state === 'RECOVERY' || !!executedActionId}>
+              {state === 'RECOVERY' || executedActionId ? 'Executing Action...' : 'Execute Action'}
             </Button>
           </div>
         </Card>

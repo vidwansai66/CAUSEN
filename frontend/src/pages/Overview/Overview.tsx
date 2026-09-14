@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from './Overview.module.css';
 
 export default function Overview() {
-  const { state, executeRecoveryAction, machines, incident, rootCause, impact, recoveryActions } = useDemoState();
+  const { state, executeRecoveryAction, machines, incident, rootCause, impact, recoveryActions, selectedActionId } = useDemoState();
   const navigate = useNavigate();
   
   const recommendedAction = recoveryActions?.find(a => a.type === 'REROUTE') || recoveryActions?.[0];
@@ -15,27 +15,90 @@ export default function Overview() {
   const totalThroughput = machines.reduce((acc, m) => acc + m.telemetry.throughput, 0);
   const avgQuality = machines.reduce((acc, m) => acc + m.telemetry.quality, 0) / machines.length;
 
+  const healthyContent = (
+    <div className={styles.healthyState}>
+      <Activity size={48} className={styles.iconSuccess} />
+      <h2 className={styles.healthyTitle}>SYSTEM HEALTHY</h2>
+      <div className={styles.healthyMetrics}>
+        <div className={styles.hMetric}>
+          <span>Line Throughput</span>
+          <strong>{totalThroughput.toLocaleString()} u/h</strong>
+        </div>
+        <div className={styles.hMetric}>
+          <span>Line Quality Yield</span>
+          <strong>{avgQuality.toFixed(1)}%</strong>
+        </div>
+        <div className={styles.hMetric}>
+          <span>Downtime Risk</span>
+          <strong className={styles.textGreen}>LOW</strong>
+        </div>
+      </div>
+      <Button variant="secondary" onClick={() => navigate('/live')}>View Live Telemetry</Button>
+    </div>
+  );
+
   if (state === 'NORMAL' || !incident) {
     return (
       <div className={styles.container}>
-        <div className={styles.healthyState}>
-          <Activity size={48} className={styles.iconSuccess} />
-          <h2 className={styles.healthyTitle}>SYSTEM HEALTHY</h2>
-          <div className={styles.healthyMetrics}>
-            <div className={styles.hMetric}>
-              <span>Line Throughput</span>
-              <strong>{totalThroughput.toLocaleString()} u/h</strong>
-            </div>
-            <div className={styles.hMetric}>
-              <span>Line Quality Yield</span>
-              <strong>{avgQuality.toFixed(1)}%</strong>
-            </div>
-            <div className={styles.hMetric}>
-              <span>Downtime Risk</span>
-              <strong className={styles.textGreen}>LOW</strong>
-            </div>
+        {healthyContent}
+      </div>
+    );
+  }
+
+  if (state === 'RECOVERY_COMPLETE' && incident) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.layoutGrid}>
+          {/* Left Column: Healthy State */}
+          <div className={styles.leftCol}>
+            {healthyContent}
           </div>
-          <Button variant="secondary" onClick={() => navigate('/live')}>View Live Telemetry</Button>
+          
+          {/* Right Column: Previously Solved Problem & Topology */}
+          <div className={styles.rightCol}>
+            <Card className={styles.recommendationPanel}>
+              <div className={styles.recHeader}>
+                <Badge variant="success" className={styles.recLabel}>PREVIOUSLY SOLVED PROBLEM</Badge>
+              </div>
+              
+              <h2 className={styles.recTitle} style={{ color: 'var(--text)' }}>{incident.title}</h2>
+              <p className={styles.recRationale}>
+                {rootCause?.description || 'Issue has been successfully resolved.'}
+              </p>
+
+              <div className={styles.recMetrics}>
+                <div className={styles.rMetric}>
+                  <span>Affected Machine</span>
+                  <strong>{incident.affectedMachineId}</strong>
+                </div>
+                <div className={styles.rMetric}>
+                  <span>Status</span>
+                  <strong className={styles.textGreen}>RESOLVED</strong>
+                </div>
+              </div>
+            </Card>
+
+            <Card className={styles.topologyPanel}>
+              <div className={styles.panelHeader}>
+                <span className={styles.panelTitle}>PRODUCTION LINE TOPOLOGY</span>
+                <Button variant="secondary" size="sm" onClick={() => navigate('/live')}>View Telemetry</Button>
+              </div>
+              <div className={styles.topologyLine}>
+                {machines.map((machine, index) => (
+                  <div key={machine.id} className={styles.topologyNodeWrapper}>
+                    <div className={`${styles.topologyNode} ${styles[`top_${machine.state.toLowerCase()}`]}`}>
+                      {machine.id}
+                    </div>
+                    {index < machines.length - 1 && (
+                      <div className={styles.topologyArrow}>
+                        <ArrowRight size={16} />
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </Card>
+          </div>
         </div>
       </div>
     );
@@ -137,12 +200,13 @@ export default function Overview() {
               <Button 
                 variant="primary" 
                 icon={<Play size={16} />}
+                disabled={state === 'RECOVERY' || !!selectedActionId}
                 onClick={() => {
                   executeRecoveryAction(recommendedAction.id);
                   navigate('/actions');
                 }}
               >
-                Execute
+                {state === 'RECOVERY' || selectedActionId ? 'Executing...' : 'Execute'}
               </Button>
             </div>
           </Card>
