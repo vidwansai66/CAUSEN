@@ -26,3 +26,58 @@
   margin: 0 auto;
   width: 100%;
 }
+
+.cinematicOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background-color: var(--background);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: overlayFadeOut 1.8s cubic-bezier(0.8, 0, 0.2, 1) forwards;
+}
+
+.cinematicLogo {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  object-fit: contain;
+  animation: cinematicEntry 1.6s cubic-bezier(0.2, 0, 0.2, 1) forwards;
+}
+
+:root[data-theme="dark"] .cinematicLogo,
+body:not([data-theme="light"]) .cinematicLogo {
+  filter: drop-shadow(0 0 24px rgba(255, 255, 255, 0.15)) brightness(1.1) contrast(1.1);
+}
+
+@keyframes overlayFadeOut {
+  0%, 75% { opacity: 1; pointer-events: all; }
+  100% { opacity: 0; pointer-events: none; visibility: hidden; }
+}
+
+@keyframes cinematicEntry {
+  0% { transform: scale(0.95); opacity: 0; filter: blur(8px); }
+  35% { transform: scale(1.05); opacity: 1; filter: blur(0px); }
+  75% { transform: scale(1.02); opacity: 1; filter: blur(0px); }
+  100% { transform: scale(0.95); opacity: 0; filter: blur(4px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cinematicOverlay {
+    animation: simpleFadeOut 1.2s ease-in forwards;
+  }
+  .cinematicLogo {
+    animation: simpleFadeIn 1s ease-out forwards;
+    filter: none;
+  }
+  @keyframes simpleFadeOut {
+    0%, 70% { opacity: 1; }
+    100% { opacity: 0; pointer-events: none; visibility: hidden; }
+  }
+  @keyframes simpleFadeIn {
+    0% { opacity: 0; }
+    30%, 80% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+}

@@ -50,8 +50,12 @@ function App() {
     <div className="simulator-container">
       <header className="header">
         <div className="header-title">
-          <Server size={28} />
-          FACTORY CONTROL ROOM
+          <img 
+            src="/causen-brand-logo.png" 
+            alt="CAUSEN AI Logo" 
+            className="header-logo"
+          />
+          <span className="header-title-text">FACTORY CONTROL ROOM</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <div className={`status-badge ${getStatusClass(globalStatus)}`}>
