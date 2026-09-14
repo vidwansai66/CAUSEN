@@ -10,17 +10,29 @@ export const Topbar: React.FC = () => {
   const { state, incident } = useDemoState();
   const { theme, toggleTheme } = useTheme();
   
-  const [currentTime, setCurrentTime] = useState<string>('');
+  const [displayTime, setDisplayTime] = useState<string>('');
+  const [frozenTime, setFrozenTime] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (state === 'RECOVERY_COMPLETE') {
+      setFrozenTime(prev => prev || new Date().toLocaleTimeString('en-US', { hour12: false }));
+    } else {
+      setFrozenTime(null);
+    }
+  }, [state]);
 
   useEffect(() => {
     const updateTime = () => {
-      const now = new Date();
-      setCurrentTime(now.toLocaleTimeString('en-US', { hour12: false }));
+      if (frozenTime) {
+        setDisplayTime(frozenTime);
+      } else {
+        setDisplayTime(new Date().toLocaleTimeString('en-US', { hour12: false }));
+      }
     };
     updateTime();
     const timer = setInterval(updateTime, 1000);
     return () => clearInterval(timer);
-  }, []);
+  }, [frozenTime]);
 
   const getStatusDisplay = () => {
     switch (state) {
@@ -51,7 +63,9 @@ export const Topbar: React.FC = () => {
           {incident && incident.status === 'ACTIVE' && (
             <span className={styles.incidentRef}>{incident.id}</span>
           )}
-          <span className={styles.timestamp}>{currentTime}</span>
+          {state !== 'NORMAL' && (
+            <span className={styles.timestamp}>{displayTime}</span>
+          )}
         </div>
       </div>
 
