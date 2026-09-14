@@ -52,8 +52,6 @@ body {
   height: 32px;
   width: auto;
   object-fit: contain;
-  /* Dark mode treatment for simulator (which is always dark) */
-  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.1)) brightness(1.1);
 }
 
 .header-title-text {

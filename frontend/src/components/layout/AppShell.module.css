@@ -46,11 +46,6 @@
   animation: cinematicEntry 1.6s cubic-bezier(0.2, 0, 0.2, 1) forwards;
 }
 
-:root[data-theme="dark"] .cinematicLogo,
-body:not([data-theme="light"]) .cinematicLogo {
-  filter: drop-shadow(0 0 24px rgba(255, 255, 255, 0.15)) brightness(1.1) contrast(1.1);
-}
-
 @keyframes overlayFadeOut {
   0%, 75% { opacity: 1; pointer-events: all; }
   100% { opacity: 0; pointer-events: none; visibility: hidden; }

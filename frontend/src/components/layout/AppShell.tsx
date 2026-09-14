@@ -21,7 +21,7 @@ export const AppShell: React.FC = () => {
       {showIntro && (
         <div className={styles.cinematicOverlay}>
           <img 
-            src="/causen-brand-logo.png" 
+            src="/logo.png" 
             alt="CAUSEN AI Cinematic Entry" 
             className={styles.cinematicLogo} 
           />

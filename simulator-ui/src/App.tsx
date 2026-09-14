@@ -51,7 +51,7 @@ function App() {
       <header className="header">
         <div className="header-title">
           <img 
-            src="/causen-brand-logo.png" 
+            src="/logo.png" 
             alt="CAUSEN AI Logo" 
             className="header-logo"
           />

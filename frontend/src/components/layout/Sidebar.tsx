@@ -17,7 +17,7 @@ export const Sidebar: React.FC = () => {
   return (
     <aside className={styles.sidebar}>
       <div className={styles.logoContainer}>
-        <img src="/causen-brand-logo.png" alt="CAUSEN AI Logo" className={styles.logoImage} />
+        <img src="/logo.png" alt="CAUSEN AI Logo" className={styles.logoImage} />
       </div>
       
       <nav className={styles.nav}>
