@@ -11,6 +11,12 @@ export interface Machine {
     vibration: number; // mm/s
     quality: number; // percentage
   };
+  safe_limits?: {
+    temperature_max: number;
+    vibration_max: number;
+    throughput_min: number;
+    defect_rate_max: number;
+  };
 }
 
 export interface TelemetryTrend {

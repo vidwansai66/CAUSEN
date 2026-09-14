@@ -197,6 +197,33 @@ class CausenSimulatorBridge:
             
             self.machines[m_id] = reading
 
+        # Apply downstream starvation modeling based on upstream actual throughput ratio
+        for m_id, cfg in MACHINES_CONFIG.items():
+            reading = self.machines[m_id]
+            upstream_machines = [u_id for u_id, u_cfg in MACHINES_CONFIG.items() if m_id in u_cfg["downstream"]]
+            
+            if upstream_machines:
+                ratios = []
+                for u_id in upstream_machines:
+                    if u_id in self.machines:
+                        u_reading = self.machines[u_id]
+                        u_baseline = MACHINES_CONFIG[u_id]["baseline"]["throughput_uph"]
+                        # Ratio is bounded to a max of 1.0 so noise spikes don't artificially boost downstream
+                        ratio = min(1.0, u_reading.throughput / u_baseline)
+                        ratios.append(ratio)
+                
+                if ratios:
+                    bottleneck_ratio = min(ratios)
+                    
+                    if bottleneck_ratio < 1.0:
+                        reading.throughput = round(reading.throughput * bottleneck_ratio, 1)
+                        
+                        if reading.throughput > 0:
+                            base_cfg = MACHINES_CONFIG[m_id]["baseline"]
+                            reading.cycle_time = round(base_cfg["cycle_time"] * (base_cfg["throughput_uph"] / reading.throughput), 1)
+                        else:
+                            reading.cycle_time = 0.0
+
         if self.recovery_active:
             self.recovery_step += 1
             
@@ -260,7 +287,8 @@ class CausenSimulatorBridge:
                     "quality": data.quality,
                     "power_consumption": getattr(data, "power_consumption", 20.0),
                     "defect_rate": getattr(data, "defect_rate", 0.5)
-                }
+                },
+                "safe_limits": MACHINES_CONFIG[m_id].get("safe_limits", {})
             })
 
         mapped_rca = None

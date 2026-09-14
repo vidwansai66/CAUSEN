@@ -196,3 +196,19 @@ FLAGSHIP_MACHINE = "M03"
 FLAGSHIP_SCENARIO = "cooling_system_degradation"
 REROUTE_TARGET_MACHINE = "M07"
 REROUTE_TARGET_LINE = "LINE-3"
+
+# Calculate and inject dynamic thresholds based on canonical simulator math
+for m_id, cfg in MACHINES_CONFIG.items():
+    base = cfg["baseline"]
+    cfg["safe_limits"] = {
+        "temperature_max": round(base["temperature"] + 15.0, 1),
+        "vibration_max": round(base["vibration"] + 1.2, 2),
+        "throughput_min": round(base["throughput_uph"] * 0.85, 1),
+        "defect_rate_max": round(base["defect_rate"] + 0.5, 2)
+    }
+    cfg["critical_limits"] = {
+        "temperature_max": round(base["temperature"] + 30.0, 1),
+        "vibration_max": round(base["vibration"] + 3.0, 2),
+        "throughput_min": round(base["throughput_uph"] * 0.5, 1),
+        "defect_rate_max": round(base["defect_rate"] + 4.0, 2)
+    }

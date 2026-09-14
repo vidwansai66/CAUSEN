@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { API_BASE_URL } from './config';
 
 export type MachineState = 'HEALTHY' | 'WARNING' | 'CRITICAL' | 'RECOVERING' | 'RECOVERED/HEALTHY';
@@ -16,6 +16,17 @@ export interface Machine {
   name: string;
   state: MachineState;
   telemetry: Telemetry;
+  safe_limits?: {
+    temperature_max: number;
+    vibration_max: number;
+    throughput_min: number;
+    defect_rate_max: number;
+  };
+  history?: {
+    throughput: number[];
+    temperature: number[];
+    vibration: number[];
+  };
 }
 
 export interface SimulatorState {
@@ -33,6 +44,8 @@ export const useSimulator = () => {
   const [state, setState] = useState<SimulatorState | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [webhookError, setWebhookError] = useState<string | null>(null);
+  
+  const historyRef = useRef<Record<string, { throughput: number[], temperature: number[], vibration: number[] }>>({});
 
   useEffect(() => {
     const fetchState = async () => {
@@ -40,6 +53,30 @@ export const useSimulator = () => {
         const res = await fetch(`${API_BASE_URL}/api/state`);
         if (!res.ok) throw new Error('Failed to fetch state');
         const data = await res.json();
+        
+        // Update history
+        if (data.machines) {
+          data.machines.forEach((m: Machine) => {
+            if (!historyRef.current[m.id]) {
+              historyRef.current[m.id] = { throughput: [], temperature: [], vibration: [] };
+            }
+            const h = historyRef.current[m.id];
+            h.throughput.push(m.telemetry.throughput);
+            h.temperature.push(m.telemetry.temperature);
+            h.vibration.push(m.telemetry.vibration);
+
+            if (h.throughput.length > 30) h.throughput.shift();
+            if (h.temperature.length > 30) h.temperature.shift();
+            if (h.vibration.length > 30) h.vibration.shift();
+            
+            m.history = {
+              throughput: [...h.throughput],
+              temperature: [...h.temperature],
+              vibration: [...h.vibration]
+            };
+          });
+        }
+        
         setState(data);
         setError(null);
       } catch (err: any) {
@@ -64,6 +101,30 @@ export const useSimulator = () => {
       const res = await fetch(`${API_BASE_URL}/api/state`);
       if (!res.ok) throw new Error('Failed to fetch state after fault injection');
       const data = await res.json();
+      
+      // Update history for fault injection response
+      if (data.machines) {
+        data.machines.forEach((m: Machine) => {
+          if (!historyRef.current[m.id]) {
+            historyRef.current[m.id] = { throughput: [], temperature: [], vibration: [] };
+          }
+          const h = historyRef.current[m.id];
+          h.throughput.push(m.telemetry.throughput);
+          h.temperature.push(m.telemetry.temperature);
+          h.vibration.push(m.telemetry.vibration);
+
+          if (h.throughput.length > 30) h.throughput.shift();
+          if (h.temperature.length > 30) h.temperature.shift();
+          if (h.vibration.length > 30) h.vibration.shift();
+          
+          m.history = {
+            throughput: [...h.throughput],
+            temperature: [...h.temperature],
+            vibration: [...h.vibration]
+          };
+        });
+      }
+      
       setState(data);
       
       // Find the affected machine telemetry

@@ -20,11 +20,13 @@ def resolve_machine_state(t: MachineTelemetry) -> str:
     cfg = MACHINES_CONFIG.get(t.machine_id)
     if not cfg:
         return "HEALTHY"
-    base = cfg["baseline"]
+        
+    crit = cfg["critical_limits"]
+    warn = cfg["safe_limits"]
     
-    if t.temperature >= base["temperature"] + 30.0 or t.vibration >= base["vibration"] + 3.0 or t.throughput <= base["throughput_uph"] * 0.5 or t.defect_rate >= base["defect_rate"] + 4.0:
+    if t.temperature >= crit["temperature_max"] or t.vibration >= crit["vibration_max"] or t.throughput <= crit["throughput_min"] or t.defect_rate >= crit["defect_rate_max"]:
         return "CRITICAL"
-    if t.temperature >= base["temperature"] + 15.0 or t.vibration >= base["vibration"] + 1.2 or t.throughput <= base["throughput_uph"] * 0.85 or t.defect_rate >= base["defect_rate"] + 0.5:
+    if t.temperature >= warn["temperature_max"] or t.vibration >= warn["vibration_max"] or t.throughput <= warn["throughput_min"] or t.defect_rate >= warn["defect_rate_max"]:
         return "WARNING"
     return "HEALTHY"
 

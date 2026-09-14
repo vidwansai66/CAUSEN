@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import type { Machine } from './useSimulator';
 import { useSimulator } from './useSimulator';
+import { VapiVoiceButton } from './VapiVoiceButton';
+import { Sparkline } from './Sparkline';
 import { Activity, AlertTriangle, CheckCircle, Flame, Server, RotateCcw, AlertOctagon, Check, X } from 'lucide-react';
 import { API_BASE_URL } from './config';
 import './App.css';
@@ -163,15 +165,39 @@ function App() {
                 <div className="telemetry-grid">
                   <div className="telemetry-item">
                     <span className="telemetry-label">Throughput</span>
-                    <span className="telemetry-value">{m.telemetry.throughput.toFixed(0)} UPH</span>
+                    <span className="telemetry-value">
+                      <span style={{ color: (m.safe_limits && m.telemetry.throughput <= m.safe_limits.throughput_min) ? '#f87171' : 'inherit' }}>{m.telemetry.throughput.toFixed(0)} UPH</span>
+                      {m.safe_limits && <span style={{ fontSize: '0.65em', color: '#9ca3af', marginLeft: '6px' }}>(MIN: {m.safe_limits.throughput_min})</span>}
+                    </span>
+                    {m.history && (
+                      <div style={{ marginTop: '4px' }}>
+                        <Sparkline data={m.history.throughput} color={(m.safe_limits && m.telemetry.throughput <= m.safe_limits.throughput_min) ? '#f87171' : '#34d399'} />
+                      </div>
+                    )}
                   </div>
                   <div className="telemetry-item">
                     <span className="telemetry-label">Temperature</span>
-                    <span className="telemetry-value">{m.telemetry.temperature.toFixed(1)} °C</span>
+                    <span className="telemetry-value">
+                      <span style={{ color: (m.safe_limits && m.telemetry.temperature >= m.safe_limits.temperature_max) ? '#f87171' : 'inherit' }}>{m.telemetry.temperature.toFixed(1)} °C</span>
+                      {m.safe_limits && <span style={{ fontSize: '0.65em', color: '#9ca3af', marginLeft: '6px' }}>(MAX: {m.safe_limits.temperature_max})</span>}
+                    </span>
+                    {m.history && (
+                      <div style={{ marginTop: '4px' }}>
+                        <Sparkline data={m.history.temperature} color={(m.safe_limits && m.telemetry.temperature >= m.safe_limits.temperature_max) ? '#f87171' : '#34d399'} />
+                      </div>
+                    )}
                   </div>
                   <div className="telemetry-item">
                     <span className="telemetry-label">Vibration</span>
-                    <span className="telemetry-value">{m.telemetry.vibration.toFixed(2)} mm/s</span>
+                    <span className="telemetry-value">
+                      <span style={{ color: (m.safe_limits && m.telemetry.vibration >= m.safe_limits.vibration_max) ? '#f87171' : 'inherit' }}>{m.telemetry.vibration.toFixed(2)} mm/s</span>
+                      {m.safe_limits && <span style={{ fontSize: '0.65em', color: '#9ca3af', marginLeft: '6px' }}>(MAX: {m.safe_limits.vibration_max})</span>}
+                    </span>
+                    {m.history && (
+                      <div style={{ marginTop: '4px' }}>
+                        <Sparkline data={m.history.vibration} color={(m.safe_limits && m.telemetry.vibration >= m.safe_limits.vibration_max) ? '#f87171' : '#34d399'} />
+                      </div>
+                    )}
                   </div>
                   <div className="telemetry-item">
                     <span className="telemetry-label">Quality</span>

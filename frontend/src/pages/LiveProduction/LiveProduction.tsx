@@ -165,8 +165,11 @@ export default function LiveProduction() {
               {/* Throughput */}
               <div className={styles.tCard}>
                 <div className={styles.tCardHeader}>Throughput</div>
-                <div className={`${styles.tCardValue} ${isSelectedMachineCritical ? styles.textRed : ''}`}>
+                <div className={`${styles.tCardValue} ${(selectedMachine.safe_limits && selectedMachine.telemetry.throughput <= selectedMachine.safe_limits.throughput_min) ? styles.textRed : ''}`}>
                   {selectedMachine.telemetry.throughput.toLocaleString()} <small>u/h</small>
+                  {selectedMachine.safe_limits && (
+                    <span style={{ fontSize: '0.6em', color: 'gray', marginLeft: '8px' }}>(MIN: {selectedMachine.safe_limits.throughput_min.toLocaleString()})</span>
+                  )}
                 </div>
                 <div className={styles.tCardChart}>
                   <ResponsiveContainer width="100%" height="100%">
@@ -180,8 +183,11 @@ export default function LiveProduction() {
               {/* Temperature */}
               <div className={styles.tCard}>
                 <div className={styles.tCardHeader}>Temperature</div>
-                <div className={`${styles.tCardValue} ${isSelectedMachineCritical ? styles.textRed : ''}`}>
+                <div className={`${styles.tCardValue} ${(selectedMachine.safe_limits && selectedMachine.telemetry.temperature >= selectedMachine.safe_limits.temperature_max) ? styles.textRed : ''}`}>
                   {selectedMachine.telemetry.temperature}°C
+                  {selectedMachine.safe_limits && (
+                    <span style={{ fontSize: '0.6em', color: 'gray', marginLeft: '8px' }}>(MAX: {selectedMachine.safe_limits.temperature_max})</span>
+                  )}
                 </div>
                 <div className={styles.tCardChart}>
                   <ResponsiveContainer width="100%" height="100%">
@@ -195,8 +201,11 @@ export default function LiveProduction() {
               {/* Vibration */}
               <div className={styles.tCard}>
                 <div className={styles.tCardHeader}>Vibration</div>
-                <div className={`${styles.tCardValue} ${isSelectedMachineCritical ? styles.textRed : ''}`}>
+                <div className={`${styles.tCardValue} ${(selectedMachine.safe_limits && selectedMachine.telemetry.vibration >= selectedMachine.safe_limits.vibration_max) ? styles.textRed : ''}`}>
                   {selectedMachine.telemetry.vibration} <small>mm/s</small>
+                  {selectedMachine.safe_limits && (
+                    <span style={{ fontSize: '0.6em', color: 'gray', marginLeft: '8px' }}>(MAX: {selectedMachine.safe_limits.vibration_max})</span>
+                  )}
                 </div>
                 <div className={styles.tCardChart}>
                   <ResponsiveContainer width="100%" height="100%">
