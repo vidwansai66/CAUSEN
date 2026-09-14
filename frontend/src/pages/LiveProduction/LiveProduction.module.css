@@ -27,7 +27,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 600px;
+  width: 100%;
+  max-width: 1200px;
   margin: 0 auto;
   padding-bottom: var(--spacing-2xl);
 }
@@ -36,11 +37,11 @@
   font-family: var(--font-mono);
   font-size: 0.875rem;
   letter-spacing: 0.1em;
-  color: var(--text-muted);
-  border: 1px dashed var(--surface-border);
+  color: var(--cyan);
+  border: 1px dashed var(--cyan);
   padding: var(--spacing-md) var(--spacing-xl);
   border-radius: var(--radius-sm);
-  background: var(--background);
+  background: rgba(34, 211, 238, 0.05);
 }
 
 .flowArrow {
@@ -48,7 +49,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  color: var(--text-muted);
+  color: var(--border-subtle);
 }
 
 .flowArrowCritical {
@@ -68,18 +69,19 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: var(--surface);
-  border: 2px solid var(--surface-border);
+  background: var(--surface-elevated);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  padding: var(--spacing-md) var(--spacing-xl);
+  padding: var(--spacing-lg) var(--spacing-xl);
   cursor: pointer;
   transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
 }
 
 .vertNode:hover {
   transform: translateY(-2px);
-  border-color: var(--blue);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+  border-color: var(--cyan);
+  box-shadow: 0 4px 12px rgba(34, 211, 238, 0.1);
 }
 
 .selectedNode {
@@ -93,8 +95,9 @@
 
 .nodeIdentity {
   display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
+  flex-direction: column;
+  gap: 4px;
+  min-width: 150px;
 }
 
 .nodeId {
@@ -105,14 +108,17 @@
 }
 
 .nodeName {
-  font-size: 1rem;
+  font-size: 0.875rem;
   color: var(--text-secondary);
 }
 
 .nodeStats {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr) auto;
+  gap: var(--spacing-xl);
   align-items: center;
-  gap: var(--spacing-lg);
+  flex: 1;
+  margin-left: var(--spacing-2xl);
 }
 
 .nodeThroughput {
@@ -123,7 +129,7 @@
 .statRow {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
 }
 
 .statLabel {
@@ -135,7 +141,7 @@
 
 .statValue {
   font-family: var(--font-mono);
-  font-size: 0.875rem;
+  font-size: 1rem;
   color: var(--text);
 }
 

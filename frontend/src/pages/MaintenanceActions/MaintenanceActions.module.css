@@ -25,7 +25,7 @@
   justify-content: space-between;
   align-items: center;
   padding: var(--spacing-lg);
-  border-bottom: 1px solid var(--surface-border);
+  border-bottom: 1px solid var(--border-subtle);
   transition: all var(--transition-normal);
 }
 
@@ -34,8 +34,8 @@
 }
 
 .actionRow:has(.iconExecuting) {
-  background: rgba(59, 130, 246, 0.05);
-  border-left: 3px solid var(--blue);
+  background: rgba(34, 211, 238, 0.05);
+  border-left: 3px solid var(--cyan);
 }
 
 .actionRow:last-child {
@@ -84,7 +84,7 @@
 }
 
 .iconCompleted { color: var(--green); }
-.iconExecuting { color: var(--blue); animation: spin 2s linear infinite; }
+.iconExecuting { color: var(--cyan); animation: spin 2s linear infinite; }
 .iconFailed { color: var(--red); }
 .iconPending { color: var(--text-muted); }
 

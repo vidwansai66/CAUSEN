@@ -1,7 +1,7 @@
 .card {
-  background-color: var(--surface);
-  border: 1px solid var(--surface-border);
-  border-radius: var(--radius-lg);
+  background-color: var(--surface-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
   padding: var(--spacing-lg);
   box-shadow: var(--shadow-sm);
   transition: all var(--transition-normal);
@@ -17,14 +17,14 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.2), transparent);
   opacity: 0;
   transition: opacity var(--transition-normal);
 }
 
 .card:hover {
-  border-color: rgba(124, 58, 237, 0.2);
+  border-color: var(--border);
   box-shadow: var(--shadow-md);
   transform: translateY(-1px);
 }

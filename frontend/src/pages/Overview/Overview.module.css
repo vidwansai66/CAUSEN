@@ -198,11 +198,10 @@
 }
 
 .recommendationPanel {
-  background: var(--surface);
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
-  box-shadow: var(--glow-primary);
+  box-shadow: 0 0 15px rgba(124, 58, 237, 0.15);
   border: 1px solid rgba(124, 58, 237, 0.3);
 }
 
@@ -274,7 +273,7 @@
 }
 
 .topologyPanel {
-  background: var(--background);
+  /* Inherit Card background */
 }
 
 .panelHeader {

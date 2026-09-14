@@ -16,7 +16,7 @@ export default function Overview() {
   const avgQuality = machines.reduce((acc, m) => acc + m.telemetry.quality, 0) / machines.length;
 
   const healthyContent = (
-    <div className={styles.healthyState}>
+    <Card className={styles.healthyState}>
       <Activity size={48} className={styles.iconSuccess} />
       <h2 className={styles.healthyTitle}>SYSTEM HEALTHY</h2>
       <div className={styles.healthyMetrics}>
@@ -34,7 +34,7 @@ export default function Overview() {
         </div>
       </div>
       <Button variant="secondary" onClick={() => navigate('/live')}>View Live Telemetry</Button>
-    </div>
+    </Card>
   );
 
   if (state === 'NORMAL' || !incident) {

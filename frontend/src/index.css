@@ -185,3 +185,128 @@ button {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+/* =========================================
+   CAUSEN Enterprise Global UI Components
+   ========================================= */
+
+/* Typography */
+.text-mono { font-family: var(--font-mono); }
+.text-muted { color: var(--text-muted); }
+.text-xs { font-size: 0.75rem; }
+.text-sm { font-size: 0.875rem; }
+.text-lg { font-size: 1.125rem; }
+.text-xl { font-size: 1.25rem; }
+.text-2xl { font-size: 1.5rem; }
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
+
+/* Standardized Cards */
+.causen-card {
+  background-color: var(--surface-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.causen-card:hover {
+  border-color: var(--border);
+  box-shadow: var(--shadow-md);
+}
+
+/* Status Badges */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.status-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.status-badge.healthy {
+  background-color: var(--green-transparent);
+  color: var(--green);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+.status-badge.healthy::before { background-color: var(--green); box-shadow: 0 0 4px var(--green); }
+
+.status-badge.warning {
+  background-color: var(--amber-transparent);
+  color: var(--amber);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+.status-badge.warning::before { background-color: var(--amber); box-shadow: 0 0 4px var(--amber); }
+
+.status-badge.critical {
+  background-color: var(--red-transparent);
+  color: var(--red);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+.status-badge.critical::before { background-color: var(--red); box-shadow: 0 0 4px var(--red); }
+
+.status-badge.recovery {
+  background-color: var(--violet-transparent);
+  color: var(--violet-bright);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+}
+.status-badge.recovery::before { background-color: var(--violet-bright); box-shadow: 0 0 4px var(--violet-bright); }
+
+.status-badge.resolved {
+  background-color: rgba(34, 211, 238, 0.15); /* Cyan */
+  color: var(--cyan);
+  border: 1px solid rgba(34, 211, 238, 0.2);
+}
+.status-badge.resolved::before { background-color: var(--cyan); box-shadow: 0 0 4px var(--cyan); }
+
+/* Buttons */
+.causen-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all var(--transition-fast);
+}
+
+.causen-btn-primary {
+  background-color: var(--violet);
+  color: #fff;
+}
+
+.causen-btn-primary:hover {
+  background-color: var(--violet-bright);
+  box-shadow: var(--glow-primary);
+}
+
+.causen-btn-secondary {
+  background-color: var(--surface-hover);
+  color: var(--text);
+  border: 1px solid var(--border-subtle);
+}
+
+.causen-btn-secondary:hover {
+  background-color: var(--surface-secondary);
+  border-color: var(--border);
+}
+
+.causen-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
