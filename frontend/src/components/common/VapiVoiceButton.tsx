@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Vapi from '@vapi-ai/web';
 import { API_BASE_URL } from '../../config';
+import { VoiceCommandService } from '../../services/voice/VoiceCommandService';
 import styles from './VapiVoiceButton.module.css';
 
 export const VapiVoiceButton: React.FC = () => {
@@ -70,6 +71,54 @@ export const VapiVoiceButton: React.FC = () => {
           setIsActive(false);
           setStatus('Error connecting');
           setTimeout(() => setStatus(''), 3000);
+        });
+
+        vapi.on('message', (message: any) => {
+          if (message.type === 'tool-calls') {
+            const toolWithToolCallList = message.toolWithToolCallList || [];
+            
+            toolWithToolCallList.forEach((toolCallWrapper: any) => {
+              const call = toolCallWrapper.toolCall;
+              
+              let args = {};
+              try {
+                args = typeof call.function.arguments === 'string' 
+                       ? JSON.parse(call.function.arguments) 
+                       : call.function.arguments;
+              } catch (e) {
+                console.error("Failed to parse tool call arguments", e);
+              }
+
+              const validationResult = VoiceCommandService.parseAndValidate(args);
+              let resultToReturn;
+              
+              if (validationResult.success && validationResult.command) {
+                resultToReturn = VoiceCommandService.handleCommand(validationResult.command);
+              } else {
+                resultToReturn = {
+                  success: false,
+                  error: validationResult.error
+                };
+              }
+
+              // Send the result back to Vapi
+              if (vapiRef.current) {
+                try {
+                  vapiRef.current.send({
+                    type: 'add-message',
+                    message: {
+                      role: 'tool',
+                      tool_call_id: call.id,
+                      name: call.function.name,
+                      content: JSON.stringify(resultToReturn)
+                    }
+                  });
+                } catch (err) {
+                  console.error("Failed to send tool response to Vapi", err);
+                }
+              }
+            });
+          }
         });
       }
       
