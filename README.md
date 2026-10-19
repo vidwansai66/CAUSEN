@@ -115,4 +115,4 @@ Interactive API docs are available at `/docs` while the backend is running.
 - Telemetry and recovery effects are simulated; the code is not physical PLC/SCADA control.
 - Results depend on thresholds and assumptions encoded in the simulator. Validate against real data before drawing operational conclusions.
 - The two Vite UI folders need a clearly documented canonical deployment target.
-- Add a CI workflow that runs backend tests and frontend builds on every pull request.
+- GitHub Actions runs backend orchestration regression tests and builds the main frontend on pushes and pull requests.
